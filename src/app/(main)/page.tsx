@@ -8,13 +8,14 @@ export default function HomePage() {
           <div className="flex flex-col max-w-2xl">
             <div className="flex items-center gap-2 mb-space-xs text-primary">
               <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-              <span className="text-xs uppercase tracking-widest text-primary font-semibold">Beranda • Literacy</span>
+              <span className="text-xs uppercase tracking-widest text-primary font-semibold">Beranda</span>
             </div>
             <h1 className="text-3xl md:text-5xl text-on-surface tracking-tight font-serif">
               Ruang baca digital, fokus tanpa distraksi
             </h1>
+            <br />
             <p className="text-base text-on-surface-variant mt-2">
-              Literacy adalah platform baca buku non-fiksi terkurasi untuk membantu kamu berpikir lebih jernih—temukan bacaan, baca dengan nyaman, dan lanjutkan progresmu kapan saja.
+              Literacy adalah platform baca buku terkurasi untuk membantu kamu berpikir lebih jernih—temukan bacaan, baca dengan nyaman, dan lanjutkan progresmu kapan saja.
             </p>
           </div>
           <div className="flex items-center gap-3 self-start md:self-end flex-wrap">

@@ -101,17 +101,18 @@ export default function ExplorePage() {
           <div className="flex flex-col max-w-2xl">
             <div className="flex items-center gap-2 mb-space-xs text-primary">
               <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-              <span className="text-xs uppercase tracking-widest text-primary font-semibold">Katalog • Pencarian Langsung</span>
+              <span className="text-xs uppercase tracking-widest text-primary font-semibold">Katalog</span>
             </div>
             <h1 className="text-3xl md:text-5xl text-on-surface tracking-tight font-serif">
               Eksplorasi
             </h1>
+            <br />
             <p className="text-base text-on-surface-variant mt-2">
               Cari buku (judul atau penulis) — hasil dimuat saat kamu mencari agar tetap hemat dan up-to-date. Buku yang bisa dibaca di sini hanya yang memiliki PDF.
             </p>
           </div>
           <div className="flex items-center gap-space-sm self-start md:self-end text-outline">
-            <span className="text-xs tracking-widest uppercase">Koleksi Terverifikasi</span>
+            <span className="text-xs tracking-widest uppercase">Terverifikasi</span>
             <span className="material-symbols-outlined text-[18px]">verified</span>
           </div>
         </div>
@@ -174,7 +175,7 @@ export default function ExplorePage() {
           <div className="bg-surface-container-lowest rounded-xl p-8 text-center shadow-sm">
             <span className="material-symbols-outlined text-[28px] text-outline/60">search</span>
             <p className="text-sm text-on-surface-variant mt-2">
-              Ketik judul atau penulis untuk melihat hasil buku yang up-to-date. Kami tidak memuat seluruh katalog agar tetap ringan.
+              Ketik judul atau penulis untuk cari buku terbaru.
             </p>
           </div>
         )}
