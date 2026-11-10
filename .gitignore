@@ -40,3 +40,6 @@ next-env.d.ts
 node_modules
 .next
 .npm-cache
+
+# Docker (keep local overrides out of git)
+docker-compose.override.yml

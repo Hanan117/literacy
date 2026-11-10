@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&amp;family=Playfair+Display:ital,wght@0,500;0,600;1,500&amp;family=Plus+Jakarta+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"background":"#fff8f3","on-tertiary":"#ffffff","on-tertiary-fixed":"#04201a","tertiary-fixed":"#cbe9de","on-tertiary-container":"#cceae0","primary-container":"#a44a32","surface-container":"#f3ede7","inverse-surface":"#32302d","error-container":"#ffdad6","primary":"#85331d","on-error-container":"#93000a","surface-container-high":"#ede7e2","on-surface":"#1d1b18","on-primary":"#ffffff","inverse-primary":"#ffb4a1","primary-fixed-dim":"#ffb4a1","on-tertiary-fixed-variant":"#314c44","surface":"#fff8f3","secondary-container":"#ffbc70","secondary-fixed-dim":"#fcb96d","tertiary-container":"#4f6b62","surface-tint":"#9b432c","on-secondary":"#ffffff","on-primary-fixed-variant":"#7c2d17","tertiary-fixed-dim":"#afcdc3","on-secondary-fixed":"#2b1700","on-error":"#ffffff","primary-fixed":"#ffdbd2","secondary":"#85530e","tertiary":"#38534b","surface-bright":"#fff8f3","surface-variant":"#e7e1dc","on-primary-fixed":"#3c0800","error":"#ba1a1a","outline-variant":"#dcc1ba","on-surface-variant":"#55423e","inverse-on-surface":"#f6f0ea","surface-container-lowest":"#ffffff","secondary-fixed":"#ffddba","on-secondary-fixed-variant":"#673d00","outline":"#89726c","surface-dim":"#dfd9d4","surface-container-low":"#f9f2ed","on-primary-container":"#ffdcd3","on-secondary-container":"#794a02","surface-container-highest":"#e7e1dc","on-background":"#1d1b18"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"margin":"3rem","space-xs":"0.25rem","space-lg":"1.5rem","space-xl":"2.5rem","space-sm":"0.5rem","gutter-mobile":"1rem","gutter":"1.5rem","margin-mobile":"1.25rem","space-md":"1rem"},"fontFamily":{"headline-lg-mobile":["Playfair Display"],"ui-body-lg":["Plus Jakarta Sans"],"display-lg":["Playfair Display"],"headline-md":["Playfair Display"],"reader-body-md":["Literata"],"headline-sm":["Playfair Display"],"reader-body-lg":["Literata"],"display-lg-mobile":["Playfair Display"],"headline-lg":["Playfair Display"],"label-sm":["Plus Jakarta Sans"],"ui-body-md":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"]},"fontSize":{"headline-lg-mobile":["26px",{"lineHeight":"34px","fontWeight":"500"}],"ui-body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"display-lg":["48px",{"lineHeight":"56px","letterSpacing":"-0.02em","fontWeight":"600"}],"headline-md":["24px",{"lineHeight":"32px","fontWeight":"500"}],"reader-body-md":["17px",{"lineHeight":"28px","letterSpacing":"0.005em","fontWeight":"400"}],"headline-sm":["20px",{"lineHeight":"28px","fontWeight":"600"}],"reader-body-lg":["20px",{"lineHeight":"34px","letterSpacing":"0.01em","fontWeight":"400"}],"display-lg-mobile":["34px",{"lineHeight":"42px","letterSpacing":"-0.015em","fontWeight":"600"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.01em","fontWeight":"500"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.05em","fontWeight":"600"}],"ui-body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"label-md":["13px",{"lineHeight":"18px","letterSpacing":"0.02em","fontWeight":"600"}]}}}};</script></head><body class="bg-background font-ui-body-md text-ui-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-low z-50 flex flex-col justify-between py-6 px-4 shadow-[0_1px_8px_rgba(0,0,0,0.03)]"><div class="flex flex-col gap-6"><div class="px-3 py-2 flex flex-col gap-1"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-[24px]">auto_stories</span><span class="font-headline-sm text-headline-sm text-primary tracking-tight">Litera</span></div><span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Ruang Baca • Perpustakaan Digital Kurasi</span></div><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary-container rounded-lg font-ui-body-md"><a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="ruang-kerja" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span><span class="font-ui-body-md text-ui-body-md">Ruang Kerja</span></a><a aria-current="page" class="flex items-center gap-3 px-3 py-2.5 transition-colors bg-primary-container text-on-primary-container rounded-lg font-ui-body-md" data-path="katalog" href="#"><span class="material-symbols-outlined text-[20px]">local_library</span><span class="font-ui-body-md text-ui-body-md">Katalog Koleksi</span></a><a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="mode-baca" href="#"><span class="material-symbols-outlined text-[20px]">menu_book</span><span class="font-ui-body-md text-ui-body-md">Mode Baca</span></a><a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="detail-buku" href="#"><span class="material-symbols-outlined text-[20px]">notes</span><span class="font-ui-body-md text-ui-body-md">Detail &amp; Catatan</span></a><a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="rating-ulasan" href="#"><span class="material-symbols-outlined text-[20px]">rate_review</span><span class="font-ui-body-md text-ui-body-md">Rating &amp; Ulasan</span></a><a class="flex items-center justify-between px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="upload-pdf" href="#"><div class="flex items-center gap-3"><span class="material-symbols-outlined text-[20px]">upload_file</span><span class="font-ui-body-md text-ui-body-md">Upload PDF</span></div><span class="bg-secondary-container text-on-secondary-container px-1.5 py-0.5 rounded font-label-sm text-label-sm uppercase font-semibold">Admin</span></a><a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="pengaturan" href="#"><span class="material-symbols-outlined text-[20px]">tune</span><span class="font-ui-body-md text-ui-body-md">Pengaturan</span></a></nav></div><div class="pt-4 px-2 bg-surface-container rounded-lg flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col"><span class="font-label-md text-label-md text-on-surface font-medium">Ahmad Kurator</span><span class="font-label-sm text-label-sm text-on-surface-variant">Kurator Aktif</span></div></div><a class="text-on-surface-variant hover:text-on-surface p-1 transition-colors" data-path="pengaturan" href="#"><span class="material-symbols-outlined text-[20px]">settings</span></a></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.03)] z-40 px-8 flex items-center justify-between"><div class="flex items-center gap-4"><div class="flex items-center gap-2 px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant"><span class="w-2 h-2 rounded-full bg-tertiary"></span><span class="font-label-sm text-label-sm font-semibold tracking-wide uppercase">Tersinkronisasi</span></div></div><div class="flex items-center gap-4"><div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant text-label-md font-label-md shadow-inner cursor-pointer hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-[18px]">search</span><span>Cari kurasi bacaan...</span><kbd class="px-1.5 py-0.5 rounded bg-surface text-on-surface-variant text-label-sm font-label-sm">⌘K</kbd></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="relative pt-16 w-full px-8 bg-background min-h-screen"><div class="flex flex-col w-full pb-16">
+<!-- Top Ambient Glow -->
+<div class="relative w-full overflow-hidden mb-8">
+<div class="absolute -top-24 right-10 w-96 h-96 rounded-full bg-secondary-container/20 blur-3xl pointer-events-none"></div>
+<div class="absolute -top-12 left-1/3 w-80 h-80 rounded-full bg-primary-fixed/30 blur-3xl pointer-events-none"></div>
+<!-- Editorial Header Block -->
+<div class="relative pt-6 pb-4 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="max-w-2xl">
+<div class="flex items-center gap-3 mb-2.5">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm tracking-widest uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+            Indeks Sastra &amp; Pemikiran
+          </span>
+<span class="font-label-sm text-label-sm text-outline tracking-wider uppercase">Vol. IV • Edisi 2025</span>
+</div>
+<h1 class="font-display-lg text-display-lg text-on-surface tracking-tight font-serif leading-none">
+          Katalog &amp; Arsip Terkurasi
+        </h1>
+<p class="mt-3 font-reader-body-md text-reader-body-md text-on-surface-variant max-w-xl leading-relaxed">
+          Koleksi pilihan karya filsafat, sastra nusantara, dan esai pemikiran yang siap diselami dalam keheningan ruang baca digital.
+        </p>
+</div>
+<!-- Quick Curatorial Summary Pill -->
+<div class="bg-surface-container-low px-5 py-3.5 rounded-xl shadow-sm flex items-center gap-6 self-start md:self-auto">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Koleksi Tersedia</span>
+<span class="font-headline-sm text-headline-sm text-primary font-serif font-bold">48 <span class="font-ui-body-md text-ui-body-md text-on-surface-variant font-normal">Karya</span></span>
+</div>
+<div class="w-px h-8 bg-surface-variant"></div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Tersinkronisasi</span>
+<span class="inline-flex items-center gap-1 text-tertiary font-label-md text-label-md font-semibold mt-0.5">
+<span class="material-symbols-outlined text-[16px]">cloud_done</span>
+            Lengkap
+          </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Filter & Utility Navigation Strip -->
+<div class="bg-surface-container-lowest p-2 rounded-xl shadow-sm mb-10 flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-4">
+<!-- Category Pills -->
+<div class="flex items-center gap-1.5 overflow-x-auto pb-1 xl:pb-0 scrollbar-none">
+<button class="cat-pill active px-4 py-2 rounded-lg bg-primary text-on-primary font-ui-body-md text-ui-body-md font-medium whitespace-nowrap shadow-sm transition-all">
+        Semua Koleksi (48)
+      </button>
+<button class="cat-pill px-4 py-2 rounded-lg bg-surface hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-ui-body-md text-ui-body-md font-medium whitespace-nowrap transition-all">
+        Filsafat &amp; Stoikisme
+      </button>
+<button class="cat-pill px-4 py-2 rounded-lg bg-surface hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-ui-body-md text-ui-body-md font-medium whitespace-nowrap transition-all">
+        Sastra Klasik
+      </button>
+<button class="cat-pill px-4 py-2 rounded-lg bg-surface hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-ui-body-md text-ui-body-md font-medium whitespace-nowrap transition-all">
+        Sains Populer
+      </button>
+<button class="cat-pill px-4 py-2 rounded-lg bg-surface hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-ui-body-md text-ui-body-md font-medium whitespace-nowrap transition-all">
+        Esai Kritis
+      </button>
+</div>
+<!-- Right Controls: Sort & Search Trigger -->
+<div class="flex items-center gap-2.5 px-1 justify-end">
+<!-- Sorting Selector -->
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-outline text-[18px] pointer-events-none">swap_vert</span>
+<select class="pl-9 pr-8 py-2 rounded-lg bg-surface-container-low text-on-surface font-ui-body-md text-ui-body-md appearance-none cursor-pointer hover:bg-surface-container transition-colors focus:outline-none">
+<option>Paling Reflektif</option>
+<option>Terbaru Masuk Koleksi</option>
+<option>Rekomendasi Redaksi</option>
+<option>Durasi Baca: Terpendek</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 text-outline text-[16px] pointer-events-none">expand_more</span>
+</div>
+<!-- Quick Search Filter Trigger -->
+<button class="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" title="Pencarian Cepat">
+<span class="material-symbols-outlined text-[18px]">search</span>
+<span class="font-label-md text-label-md hidden sm:inline">Cari Arsip</span>
+</button>
+<!-- View Switcher -->
+<div class="hidden sm:flex items-center bg-surface-container-low p-1 rounded-lg">
+<button class="w-8 h-8 rounded bg-surface-container-lowest text-primary shadow-xs flex items-center justify-center" title="Grid Lega">
+<span class="material-symbols-outlined text-[18px]">grid_view</span>
+</button>
+<button class="w-8 h-8 rounded text-outline hover:text-on-surface flex items-center justify-center transition-colors" title="Daftar Terurai">
+<span class="material-symbols-outlined text-[18px]">view_list</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Editorial Books Bento / Large Grid (3 Spacious Columns on Desktop) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+<!-- Card 1: Filosofi Teras -->
+<article class="group relative flex flex-col bg-surface-container-lowest rounded-xl p-5 shadow-sm hover:shadow-xl transition-all duration-300">
+<div class="relative w-full h-[320px] rounded-lg overflow-hidden bg-surface-container-high mb-5 flex items-center justify-center shadow-[inset_0_0_0_1px_rgba(0,0,0,0.02)]">
+<!-- Badge -->
+<div class="absolute top-3 left-3 z-10">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm font-semibold tracking-wide shadow-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed animate-ping"></span>
+            Sedang Dibaca
+          </span>
+</div>
+<div class="absolute top-3 right-3 z-10">
+<button class="w-8 h-8 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface-variant hover:text-primary flex items-center justify-center shadow-sm transition-colors" title="Simpan Kutipan">
+<span class="material-symbols-outlined text-[18px]">bookmark</span>
+</button>
+</div>
+<!-- Book Cover Image with Spine Shadow -->
+<div class="relative h-[280px] w-[190px] rounded-md shadow-2xl overflow-hidden transform group-hover:-translate-y-1.5 transition-transform duration-300">
+<div class="absolute left-0 top-0 bottom-0 w-2.5 bg-gradient-to-r from-black/35 via-black/15 to-transparent z-10 pointer-events-none"></div>
+<img class="w-full h-full object-cover object-center" data-alt="Cover of Filosofi Teras book by Henry Manampiring, minimalist warm terracotta cover art with classic typography, elegant literary aesthetic, studio lighting, high resolution paper texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxsP2UwydD1wEet_0o6n5ss9LAu8czqD0biNyy1MsprvxilymYJUvwiO1CgPE61a44JK4wD8ciDbc_MqqMkvdyW4fEcTtD95Jd9cLVXxTtY0c57-25YWup2STfEoWzwdoMjeUYkk9w0PCrOhGTD3y79sqAsO4GXw3vFhH1QoD5h_xsUvaV0ZuLoe5N7Bbh-wT255aEuJbLZdzSTsCSyKRRK4HxPWs1F1c3zDlv7Ts"/>
+</div>
+</div>
+<!-- Content Metadata -->
+<div class="flex flex-col flex-1 justify-between">
+<div>
+<div class="flex items-center justify-between gap-2 mb-1.5">
+<span class="font-label-sm text-label-sm text-secondary font-semibold uppercase tracking-wider">Stoikisme • Psikologi</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">320 hal • ~5.5 jam</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors font-serif font-medium line-clamp-1">
+            Filosofi Teras
+          </h2>
+<p class="font-label-md text-label-md text-on-surface-variant mb-3">
+            Henry Manampiring
+          </p>
+<p class="font-ui-body-md text-ui-body-md text-on-surface-variant line-clamp-2 leading-relaxed mb-4">
+            Penerapan filsafat Yunani-Romawi kuno stoisisme sebagai kompas mental bagi ketenangan emosi manusia urban modern.
+          </p>
+</div>
+<!-- Card Action Footer -->
+<div class="pt-4 mt-auto flex items-center gap-2.5">
+<a class="flex-1 py-2.5 px-4 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-ui-body-md text-ui-body-md font-medium text-center shadow-sm hover:shadow transition-all flex items-center justify-center gap-1.5" data-path="mode-baca" href="#">
+<span class="material-symbols-outlined text-[18px]">menu_book</span>
+<span>Mulai Baca</span>
+</a>
+<a class="py-2.5 px-3.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-ui-body-md text-ui-body-md transition-colors" data-path="detail-buku" href="#" title="Detail &amp; Catatan">
+<span class="material-symbols-outlined text-[18px]">notes</span>
+</a>
+</div>
+</div>
+</article>
+<!-- Card 2: Meditations -->
+<article class="group relative flex flex-col bg-surface-container-lowest rounded-xl p-5 shadow-sm hover:shadow-xl transition-all duration-300">
+<div class="relative w-full h-[320px] rounded-lg overflow-hidden bg-surface-container-high mb-5 flex items-center justify-center">
+<!-- Badge -->
+<div class="absolute top-3 left-3 z-10">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-container text-on-primary font-label-sm text-label-sm font-semibold tracking-wide shadow-sm">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+            Rekomendasi Redaksi
+          </span>
+</div>
+<div class="absolute top-3 right-3 z-10">
+<button class="w-8 h-8 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface-variant hover:text-primary flex items-center justify-center shadow-sm transition-colors" title="Simpan Kutipan">
+<span class="material-symbols-outlined text-[18px]">bookmark</span>
+</button>
+</div>
+<!-- Book Cover -->
+<div class="relative h-[280px] w-[190px] rounded-md shadow-2xl overflow-hidden transform group-hover:-translate-y-1.5 transition-transform duration-300">
+<div class="absolute left-0 top-0 bottom-0 w-2.5 bg-gradient-to-r from-black/35 via-black/15 to-transparent z-10 pointer-events-none"></div>
+<img class="w-full h-full object-cover object-center" data-alt="Cover of Meditations by Marcus Aurelius book, antique parchment marble background with classical Roman typography, deep terracotta and bronze tones, museum collection aesthetics" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-kNK9TJ_cI4dHesb25y9NMME3EtyIjejiNrNDaG48kQ_4Y-RGhG__Db7rGxlTTFWydZqwu7EMWsIGEbjaC77OnUsfi49m21euTmFPJrbmkwZWs_MCr8sPCgIr9j4TfX7GOdIepm2ex8A78PsPw0Hi25O54V3SEtmCZp08DEOD01PjY3PXkVFJwQ3yfWJvXB1n0WnUJTAQgAUVcKBeBu3VgtAeoYH9MuyVzvf0YOY"/>
+</div>
+</div>
+<!-- Content Metadata -->
+<div class="flex flex-col flex-1 justify-between">
+<div>
+<div class="flex items-center justify-between gap-2 mb-1.5">
+<span class="font-label-sm text-label-sm text-tertiary font-semibold uppercase tracking-wider">Filsafat Klasik</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">208 hal • ~3.8 jam</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors font-serif font-medium line-clamp-1">
+            Meditations
+          </h2>
+<p class="font-label-md text-label-md text-on-surface-variant mb-3">
+            Marcus Aurelius
+          </p>
+<p class="font-ui-body-md text-ui-body-md text-on-surface-variant line-clamp-2 leading-relaxed mb-4">
+            Catatan harian kaisar Roma tentang kedisiplinan batin, kematian, kewajiban etis, dan kejernihan menghadapi turbulensi duniawi.
+          </p>
+</div>
+<!-- Action Footer -->
+<div class="pt-4 mt-auto flex items-center gap-2.5">
+<a class="flex-1 py-2.5 px-4 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-ui-body-md text-ui-body-md font-medium text-center shadow-sm hover:shadow transition-all flex items-center justify-center gap-1.5" data-path="mode-baca" href="#">
+<span class="material-symbols-outlined text-[18px]">menu_book</span>
+<span>Mulai Baca</span>
+</a>
+<a class="py-2.5 px-3.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-ui-body-md text-ui-body-md transition-colors" data-path="detail-buku" href="#" title="Detail &amp; Catatan">
+<span class="material-symbols-outlined text-[18px]">notes</span>
+</a>
+</div>
+</div>
+</article>
+<!-- Card 3: Bumi Manusia -->
+<article class="group relative flex flex-col bg-surface-container-lowest rounded-xl p-5 shadow-sm hover:shadow-xl transition-all duration-300">
+<div class="relative w-full h-[320px] rounded-lg overflow-hidden bg-surface-container-high mb-5 flex items-center justify-center">
+<div class="absolute top-3 right-3 z-10">
+<button class="w-8 h-8 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface-variant hover:text-primary flex items-center justify-center shadow-sm transition-colors" title="Simpan Kutipan">
+<span class="material-symbols-outlined text-[18px]">bookmark</span>
+</button>
+</div>
+<!-- Book Cover -->
+<div class="relative h-[280px] w-[190px] rounded-md shadow-2xl overflow-hidden transform group-hover:-translate-y-1.5 transition-transform duration-300">
+<div class="absolute left-0 top-0 bottom-0 w-2.5 bg-gradient-to-r from-black/35 via-black/15 to-transparent z-10 pointer-events-none"></div>
+<img class="w-full h-full object-cover object-center" data-alt="Cover of Bumi Manusia novel by Pramoedya Ananta Toer, vintage colonial Javanese aesthetic, warm sepia, archival paper texture with evocative silhouette and bold Indonesian literary typography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCvxkYySK7cPdLYot4fi6vSecC-aiIHupkJzlJutuv7vlXG-72V_XST_1eAgU1L917Mx7AuNMntAQctZ9OhayE7PK38UzbpVMZB7OsswEkr6xB5NezxBeaQR_nNMhJryWYi5UHhA6JatqnBZP-AqLW0AGxMLfqQuF-w6Rnkjg_rqMMPKvN85DxT6emEFkgj_ZJrTjCWsEwQTHd_ywQcmdgsCKJJqSkSQcr9g-s81M"/>
+</div>
+</div>
+<!-- Content Metadata -->
+<div class="flex flex-col flex-1 justify-between">
+<div>
+<div class="flex items-center justify-between gap-2 mb-1.5">
+<span class="font-label-sm text-label-sm text-primary font-semibold uppercase tracking-wider">Sastra Sejarah</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">538 hal • ~8.5 jam</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors font-serif font-medium line-clamp-1">
+            Bumi Manusia
+          </h2>
+<p class="font-label-md text-label-md text-on-surface-variant mb-3">
+            Pramoedya Ananta Toer
+          </p>
+<p class="font-ui-body-md text-ui-body-md text-on-surface-variant line-clamp-2 leading-relaxed mb-4">
+            Kisah pergerakan kebangsaan Minke dan cinta tragisnya dengan Annelies di pusaran feodalisme serta kolonialisme Hindia Belanda.
+          </p>
+</div>
+<!-- Action Footer -->
+<div class="pt-4 mt-auto flex items-center gap-2.5">
+<a class="flex-1 py-2.5 px-4 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-ui-body-md text-ui-body-md font-medium text-center shadow-sm hover:shadow transition-all flex items-center justify-center gap-1.5" data-path="mode-baca" href="#">
+<span class="material-symbols-outlined text-[18px]">menu_book</span>
+<span>Mulai Baca</span>
+</a>
+<a class="py-2.5 px-3.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-ui-body-md text-ui-body-md transition-colors" data-path="detail-buku" href="#" title="Detail &amp; Catatan">
+<span class="material-symbols-outlined text-[18px]">notes</span>
+</a>
+</div>
+</div>
+</article>
+<!-- Card 4: Dunia Sophie -->
+<article class="group relative flex flex-col bg-surface-container-lowest rounded-xl p-5 shadow-sm hover:shadow-xl transition-all duration-300">
+<div class="relative w-full h-[320px] rounded-lg overflow-hidden bg-surface-container-high mb-5 flex items-center justify-center">
+<div class="absolute top-3 right-3 z-10">
+<button class="w-8 h-8 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface-variant hover:text-primary flex items-center justify-center shadow-sm transition-colors" title="Simpan Kutipan">
+<span class="material-symbols-outlined text-[18px]">bookmark</span>
+</button>
+</div>
+<!-- Book Cover -->
+<div class="relative h-[280px] w-[190px] rounded-md shadow-2xl overflow-hidden transform group-hover:-translate-y-1.5 transition-transform duration-300">
+<div class="absolute left-0 top-0 bottom-0 w-2.5 bg-gradient-to-r from-black/35 via-black/15 to-transparent z-10 pointer-events-none"></div>
+<img class="w-full h-full object-cover object-center" data-alt="Cover of Dunia Sophie by Jostein Gaarder, whimsical deep midnight and emerald tones, mysterious letter motif, poetic philosophical illustration, Scandinavian minimalist design" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPTA5KY_7aW8ft39gGB_9ow8Yzo4-eCwHJ0BX-ocLZlD2pAMZ3Ltz820nYT7Wjkqv5o785aUPi0IzBbGRxSDfDClLKk_ep9IDJalWCdCGTBhTuXXYaDhJjqT7Ennh6RFZtTgR6d42qP5gFWStAKSeSKU_qRRFlNqNaAsGMLbsygqD1TjhBq3-PaqawhcZqPCBC7BEFGRaiVtRLznevNAeVf-_xwYhMc-HSIQwcv-M"/>
+</div>
+</div>
+<!-- Content Metadata -->
+<div class="flex flex-col flex-1 justify-between">
+<div>
+<div class="flex items-center justify-between gap-2 mb-1.5">
+<span class="font-label-sm text-label-sm text-tertiary font-semibold uppercase tracking-wider">Sejarah Pemikiran</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">560 hal • ~9 jam</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors font-serif font-medium line-clamp-1">
+            Dunia Sophie
+          </h2>
+<p class="font-label-md text-label-md text-on-surface-variant mb-3">
+            Jostein Gaarder
+          </p>
+<p class="font-ui-body-md text-ui-body-md text-on-surface-variant line-clamp-2 leading-relaxed mb-4">
+            Perjalanan memikat seorang gadis remaja menelusuri sejarah tiga ribu tahun pemikiran filsafat Barat melalui surat-surat misterius.
+          </p>
+</div>
+<!-- Action Footer -->
+<div class="pt-4 mt-auto flex items-center gap-2.5">
+<a class="flex-1 py-2.5 px-4 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-ui-body-md text-ui-body-md font-medium text-center shadow-sm hover:shadow transition-all flex items-center justify-center gap-1.5" data-path="mode-baca" href="#">
+<span class="material-symbols-outlined text-[18px]">menu_book</span>
+<span>Mulai Baca</span>
+</a>
+<a class="py-2.5 px-3.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-ui-body-md text-ui-body-md transition-colors" data-path="detail-buku" href="#" title="Detail &amp; Catatan">
+<span class="material-symbols-outlined text-[18px]">notes</span>
+</a>
+</div>
+</div>
+</article>
+<!-- Card 5: Cantik Itu Luka -->
+<article class="group relative flex flex-col bg-surface-container-lowest rounded-xl p-5 shadow-sm hover:shadow-xl transition-all duration-300">
+<div class="relative w-full h-[320px] rounded-lg overflow-hidden bg-surface-container-high mb-5 flex items-center justify-center">
+<div class="absolute top-3 right-3 z-10">
+<button class="w-8 h-8 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface-variant hover:text-primary flex items-center justify-center shadow-sm transition-colors" title="Simpan Kutipan">
+<span class="material-symbols-outlined text-[18px]">bookmark</span>
+</button>
+</div>
+<!-- Book Cover -->
+<div class="relative h-[280px] w-[190px] rounded-md shadow-2xl overflow-hidden transform group-hover:-translate-y-1.5 transition-transform duration-300">
+<div class="absolute left-0 top-0 bottom-0 w-2.5 bg-gradient-to-r from-black/35 via-black/15 to-transparent z-10 pointer-events-none"></div>
+<img class="w-full h-full object-cover object-center" data-alt="Cover of Cantik Itu Luka novel by Eka Kurniawan, magical realism aesthetic, tropical dark crimson floral motifs, bold Indonesian literary artwork with rich texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHY37jtz_U08eQ_i96w4VLmkFBYcNsXlgSUgaEpCLPZ3iHppuSlFf0EmT_5uP8mKZF19fTBFh2Fgwiu9lxDNYdCuLkzdv_rto4SJdXnBmJ-XOF_eskBAt_lMndJ9LNjYCPdwOXYgswuY7w4jrl1TIszjTEVXHzTDGdZoyR7nJmjiPHWdzwWA6hpwev1vFyLv_gOOBVrVpO-tnJr0FxeX9CJTypxnG_wcapitdQY6w"/>
+</div>
+</div>
+<!-- Content Metadata -->
+<div class="flex flex-col flex-1 justify-between">
+<div>
+<div class="flex items-center justify-between gap-2 mb-1.5">
+<span class="font-label-sm text-label-sm text-primary font-semibold uppercase tracking-wider">Realisme Magis</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">508 hal • ~8 jam</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors font-serif font-medium line-clamp-1">
+            Cantik Itu Luka
+          </h2>
+<p class="font-label-md text-label-md text-on-surface-variant mb-3">
+            Eka Kurniawan
+          </p>
+<p class="font-ui-body-md text-ui-body-md text-on-surface-variant line-clamp-2 leading-relaxed mb-4">
+            Kisah fabel mitologis dan tragedi sejarah kota Halimunda, menelusuri kebangkitan Dewi Ayu dari kubur dan kutukan kecantikan.
+          </p>
+</div>
+<!-- Action Footer -->
+<div class="pt-4 mt-auto flex items-center gap-2.5">
+<a class="flex-1 py-2.5 px-4 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-ui-body-md text-ui-body-md font-medium text-center shadow-sm hover:shadow transition-all flex items-center justify-center gap-1.5" data-path="mode-baca" href="#">
+<span class="material-symbols-outlined text-[18px]">menu_book</span>
+<span>Mulai Baca</span>
+</a>
+<a class="py-2.5 px-3.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-ui-body-md text-ui-body-md transition-colors" data-path="detail-buku" href="#" title="Detail &amp; Catatan">
+<span class="material-symbols-outlined text-[18px]">notes</span>
+</a>
+</div>
+</div>
+</article>
+<!-- Card 6: Catatan Pinggir -->
+<article class="group relative flex flex-col bg-surface-container-lowest rounded-xl p-5 shadow-sm hover:shadow-xl transition-all duration-300">
+<div class="relative w-full h-[320px] rounded-lg overflow-hidden bg-surface-container-high mb-5 flex items-center justify-center">
+<div class="absolute top-3 right-3 z-10">
+<button class="w-8 h-8 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface-variant hover:text-primary flex items-center justify-center shadow-sm transition-colors" title="Simpan Kutipan">
+<span class="material-symbols-outlined text-[18px]">bookmark</span>
+</button>
+</div>
+<!-- Book Cover -->
+<div class="relative h-[280px] w-[190px] rounded-md shadow-2xl overflow-hidden transform group-hover:-translate-y-1.5 transition-transform duration-300">
+<div class="absolute left-0 top-0 bottom-0 w-2.5 bg-gradient-to-r from-black/35 via-black/15 to-transparent z-10 pointer-events-none"></div>
+<img class="w-full h-full object-cover object-center" data-alt="Cover of Catatan Pinggir essay anthology by Goenawan Mohamad, tactile cream parchment aesthetic, understated intellectual serif typographic composition, coffee stain textures and archival print layout" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDw8h-WTdHGKAuqeuW9t6VWmvN04y7oQc1s8Ne7ZWsLr1YZunFOPMZxe9IjCKGXC-l1dvKgeWYxWhJjqRAXngL4VTp0fDRa4G9OVojPFk2bmqLdlfDdEo5E-94MisZe368BMcxEo8QIt5CrieueMm02XkUaGEhWySYRq8BBosJDk80m7vxMrZrZdnVIVQZhRoAwg0uAkq_0CvoJRWoh6FG5ePYewW-lgHe3VKx0F5g"/>
+</div>
+</div>
+<!-- Content Metadata -->
+<div class="flex flex-col flex-1 justify-between">
+<div>
+<div class="flex items-center justify-between gap-2 mb-1.5">
+<span class="font-label-sm text-label-sm text-secondary font-semibold uppercase tracking-wider">Kumpulan Esai</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">412 hal • ~6.5 jam</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors font-serif font-medium line-clamp-1">
+            Catatan Pinggir
+          </h2>
+<p class="font-label-md text-label-md text-on-surface-variant mb-3">
+            Goenawan Mohamad
+          </p>
+<p class="font-ui-body-md text-ui-body-md text-on-surface-variant line-clamp-2 leading-relaxed mb-4">
+            Refleksi puitis mingguan atas perkara kemanusiaan, politik kekuasaan, seni, dan kepedihan zaman yang tak kunjung selesai.
+          </p>
+</div>
+<!-- Action Footer -->
+<div class="pt-4 mt-auto flex items-center gap-2.5">
+<a class="flex-1 py-2.5 px-4 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-ui-body-md text-ui-body-md font-medium text-center shadow-sm hover:shadow transition-all flex items-center justify-center gap-1.5" data-path="mode-baca" href="#">
+<span class="material-symbols-outlined text-[18px]">menu_book</span>
+<span>Mulai Baca</span>
+</a>
+<a class="py-2.5 px-3.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-ui-body-md text-ui-body-md transition-colors" data-path="detail-buku" href="#" title="Detail &amp; Catatan">
+<span class="material-symbols-outlined text-[18px]">notes</span>
+</a>
+</div>
+</div>
+</article>
+</div>
+<!-- Editorial Shelf Highlight Banner -->
+<div class="mt-14 mb-10 p-8 rounded-2xl bg-surface-container-low relative overflow-hidden shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="relative z-10 max-w-xl">
+<span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-widest block mb-2">Program Kurasi Mingguan</span>
+<h3 class="font-headline-md text-headline-md text-on-surface font-serif font-medium leading-snug">
+        Ingin mengusulkan naskah atau buku klasik untuk ditambahkan ke repositori Litera?
+      </h3>
+<p class="mt-2 font-ui-body-md text-ui-body-md text-on-surface-variant">
+        Setiap karya melalui proses kurasi ketat, digitalisasi ortografi asli, dan anotasi kontekstual oleh dewan kurator.
+      </p>
+</div>
+<div class="relative z-10 flex items-center gap-3">
+<a class="px-5 py-3 rounded-lg bg-primary text-on-primary font-ui-body-md text-ui-body-md font-medium shadow-sm hover:bg-primary-container transition-all flex items-center gap-2" data-path="upload-pdf" href="#">
+<span class="material-symbols-outlined text-[20px]">upload_file</span>
+<span>Kirim Usulan Naskah</span>
+</a>
+</div>
+<!-- Subtle Decorative Background Shape -->
+<div class="absolute -right-10 -bottom-10 w-72 h-72 rounded-full bg-secondary-fixed/40 blur-2xl pointer-events-none"></div>
+</div>
+<!-- Minimalist Pagination & Progress Indicator -->
+<div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<p class="font-ui-body-md text-ui-body-md text-on-surface-variant font-medium">
+        Menampilkan <span class="text-on-surface font-semibold">6</span> dari <span class="text-on-surface font-semibold">48</span> karya pilihan
+      </p>
+</div>
+<!-- Paginated Buttons -->
+<nav aria-label="Navigasi Halaman Katalog" class="flex items-center gap-1.5">
+<button class="w-9 h-9 rounded-lg bg-surface-container hover:bg-surface-container-high text-outline hover:text-on-surface flex items-center justify-center transition-colors disabled:opacity-40" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-9 h-9 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-semibold flex items-center justify-center shadow-xs">
+        1
+      </button>
+<button class="w-9 h-9 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md font-medium flex items-center justify-center transition-colors">
+        2
+      </button>
+<button class="w-9 h-9 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md font-medium flex items-center justify-center transition-colors">
+        3
+      </button>
+<span class="px-2 text-outline font-label-md text-label-md">...</span>
+<button class="w-9 h-9 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md font-medium flex items-center justify-center transition-colors">
+        8
+      </button>
+<button class="w-9 h-9 rounded-lg bg-surface-container hover:bg-surface-container-high text-outline hover:text-on-surface flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</nav>
+</div>
+</div>
+<script>
+  // Simple category pill toggle interaction
+  document.querySelectorAll('.cat-pill').forEach(pill => {
+    pill.addEventListener('click', function() {
+      document.querySelectorAll('.cat-pill').forEach(p => {
+        p.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+        p.classList.add('bg-surface', 'text-on-surface-variant');
+      });
+      this.classList.remove('bg-surface', 'text-on-surface-variant');
+      this.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+    });
+  });
+</script></main></div></body></html>
