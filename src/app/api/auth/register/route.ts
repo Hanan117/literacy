@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { timingSafeEqual } from "crypto";
-import { supabaseAdmin } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/server";
+import { syncUserToPrisma } from "@/lib/auth/sync-user";
 
 type Role = "READER" | "ADMIN";
 
@@ -55,7 +56,8 @@ export async function POST(req: Request) {
       finalRole = "ADMIN";
     }
 
-    const { data, error } = await supabaseAdmin.auth.admin.createUser({
+    const supabase = createAdminClient();
+    const { data, error } = await supabase.auth.admin.createUser({
       email,
       password,
       email_confirm: true,
@@ -70,7 +72,20 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: msg }, { status: 400 });
     }
 
-    return NextResponse.json({ ok: true, userId: data.user?.id, role: finalRole });
+    if (!data.user) {
+      return NextResponse.json({ error: "Gagal membuat akun." }, { status: 500 });
+    }
+
+    try {
+      await syncUserToPrisma(data.user);
+    } catch {
+      return NextResponse.json(
+        { error: "Akun dibuat, tetapi gagal menyiapkan profil pengguna." },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ ok: true, userId: data.user.id, role: finalRole });
   } catch {
     return NextResponse.json({ error: "Permintaan tidak valid." }, { status: 400 });
   }

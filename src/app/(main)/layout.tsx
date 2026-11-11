@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import PublicAuthNav from "@/components/public-auth-nav";
 
 export default function MainLayout({
   children,
@@ -30,8 +31,7 @@ export default function MainLayout({
             <Link href="/explore" className={navLinkClass("/explore")}>Eksplorasi</Link>
           </nav>
           <div className="flex items-center gap-3">
-            <Link href="/login" className="text-sm text-on-surface-variant hover:text-primary transition-colors">Masuk</Link>
-            <Link href="/register" className="px-4 py-2 bg-primary text-on-primary rounded-lg text-sm hover:bg-primary-container transition-colors">Daftar</Link>
+            <PublicAuthNav />
           </div>
         </div>
       </header>

@@ -2,49 +2,104 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
-import { supabase } from "@/lib/supabase/client";
+import { useRouter, useSearchParams } from "next/navigation";
+import { FormEvent, Suspense, useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 
-export default function LoginPage() {
+function friendlyAuthError(message?: string) {
+  const text = (message || "").toLowerCase();
+  if (text.includes("invalid login credentials") || text.includes("invalid credentials")) {
+    return "Email atau kata sandi salah.";
+  }
+  if (text.includes("email not confirmed")) {
+    return "Email belum dikonfirmasi. Periksa kotak masuk Anda.";
+  }
+  if (text.includes("rate limit") || text.includes("too many")) {
+    return "Terlalu banyak percobaan. Coba lagi beberapa saat lagi.";
+  }
+  return "Gagal masuk. Coba lagi.";
+}
+
+function LoginContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
+
+  const queryError = searchParams.get("error");
+  const error =
+    formError ??
+    (queryError === "oauth"
+      ? "Login sosial gagal. Silakan coba lagi."
+      : queryError === "config"
+        ? "Login sosial belum dikonfigurasi."
+        : null);
+
+  // Sudah punya sesi? Jangan tampilkan form login lagi.
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      if (!data.user) return;
+      const raw = searchParams.get("returnTo");
+      const target =
+        raw && raw.startsWith("/") && !raw.startsWith("//") ? raw : "/katalog";
+      router.replace(target);
+    });
+  }, [router, searchParams]);
 
   async function handleOAuth(provider: "google" | "apple") {
-    setError(null);
+    setFormError(null);
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-      setError("Login sosial belum dikonfigurasi.");
+      setFormError("Login sosial belum dikonfigurasi.");
       return;
     }
     setLoading(true);
-    const { error: oauthError } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: { redirectTo: `${window.location.origin}/auth/callback?next=/` },
-    });
-    if (oauthError) {
-      setError(oauthError.message || "Gagal memulai login sosial.");
+    try {
+      const supabase = createClient();
+      const { error: oauthError } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: { redirectTo: `${window.location.origin}/auth/callback?next=/katalog` },
+      });
+      if (oauthError) {
+        setFormError(friendlyAuthError(oauthError.message));
+        setLoading(false);
+      }
+    } catch (err) {
+      setFormError(err instanceof Error ? friendlyAuthError(err.message) : "Login sosial gagal. Silakan coba lagi.");
       setLoading(false);
     }
   }
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
-    setError(null);
+    setFormError(null);
     setLoading(true);
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
-      password,
-    });
-    if (signInError) {
-      setError(signInError.message || "Email atau kata sandi salah.");
+    try {
+      const supabase = createClient();
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
+      if (signInError) {
+        setFormError(friendlyAuthError(signInError.message));
+        setLoading(false);
+        return;
+      }
+
+      const rawReturnTo = searchParams.get("returnTo");
+      const returnTo =
+        rawReturnTo && rawReturnTo.startsWith("/") && !rawReturnTo.startsWith("//")
+          ? rawReturnTo
+          : null;
+
+      router.push(returnTo ?? "/katalog");
+      router.refresh();
+    } catch (err) {
+      setFormError(err instanceof Error ? friendlyAuthError(err.message) : "Gagal masuk. Coba lagi.");
       setLoading(false);
-      return;
     }
-    router.push("/");
-    router.refresh();
   }
 
   return (
@@ -176,5 +231,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginContent />
+    </Suspense>
   );
 }

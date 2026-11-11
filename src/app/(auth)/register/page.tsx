@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
-import { supabase } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 
 type Role = "READER" | "ADMIN";
 
@@ -31,12 +31,18 @@ export default function RegisterPage() {
       return;
     }
     setLoading(true);
-    const { error: oauthError } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: { redirectTo: `${window.location.origin}/auth/callback?next=/onboarding` },
-    });
-    if (oauthError) {
-      setError(oauthError.message || "Gagal memulai login sosial.");
+    try {
+      const supabase = createClient();
+      const { error: oauthError } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: { redirectTo: `${window.location.origin}/auth/callback?next=/katalog` },
+      });
+      if (oauthError) {
+        setError(oauthError.message || "Gagal memulai login sosial.");
+        setLoading(false);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Login sosial belum dikonfigurasi.");
       setLoading(false);
     }
   }
@@ -72,6 +78,7 @@ export default function RegisterPage() {
         setLoading(false);
         return;
       }
+      const supabase = createClient();
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password,
@@ -81,7 +88,7 @@ export default function RegisterPage() {
         router.push("/login");
         return;
       }
-      router.push(role === "ADMIN" ? "/dashboard" : "/onboarding");
+      router.push("/katalog");
       router.refresh();
     } catch {
       setError("Terjadi kesalahan. Coba lagi.");
