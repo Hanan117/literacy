@@ -55,7 +55,10 @@ model Book {
   author       String
   synopsis     String?   @db.Text
   language     String
+  series       String?
+  estimatedMinutes Int?
   pdfUrl       String
+  epubUrl      String?
   pdfPageCount Int
   coverUrl     String?
   fileSize     BigInt?

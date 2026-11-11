@@ -1,6 +1,44 @@
-export default function UploadPage() {
+import { redirect } from "next/navigation";
+import UploadManager, {
+  type UploadBook,
+  type UploadCategory,
+} from "@/components/upload/upload-manager";
+import { getAdminUser } from "@/lib/auth/require-admin";
+import { resolveCoverUrl } from "@/lib/books/cover-url";
+import { prisma } from "@/lib/prisma";
+
+export default async function UploadPage() {
+  const admin = await getAdminUser();
+  if (!admin) redirect("/katalog");
+
+  const [books, categories] = await Promise.all([
+    prisma.book.findMany({
+      where: { deletedAt: null },
+      include: { category: true },
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.category.findMany({ orderBy: [{ sortOrder: "asc" }, { name: "asc" }] }),
+  ]);
+
+  const uploadBooks: UploadBook[] = books.map((book) => ({
+    id: book.id,
+    title: book.title,
+    author: book.author,
+    category: book.category?.name ?? "Tanpa Kategori",
+    isPublished: book.isPublished,
+    coverUrl: resolveCoverUrl(book.coverUrl),
+    fileSize: book.fileSize === null ? null : Number(book.fileSize),
+    pdfPageCount: book.pdfPageCount,
+    createdAt: book.createdAt.toISOString(),
+  }));
+
+  const uploadCategories: UploadCategory[] = categories.map((category) => ({
+    slug: category.slug,
+    name: category.name,
+  }));
+
   return (
-    <div className="mx-auto w-full max-w-[860px] px-5 py-8 md:px-8 md:py-10 xl:px-10">
+    <div className="mx-auto w-full max-w-[1180px] px-5 py-8 md:px-8 md:py-10 xl:px-10">
       <div className="flex items-center gap-2">
         <span className="h-1.5 w-1.5 rounded-[999px] bg-primary" />
         <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-on-surface-variant">
@@ -11,23 +49,12 @@ export default function UploadPage() {
       <h1 className="mt-3 font-serif text-3xl font-medium tracking-tight text-on-surface md:text-4xl">
         Upload PDF
       </h1>
-      <p className="mt-3 max-w-xl font-serif text-[15px] leading-relaxed text-on-surface-variant">
-        Tambahkan koleksi PDF baru ke arsip. Buku yang sudah diunggah dan
-        dipublikasikan akan tampil di katalog pembaca.
+      <p className="mt-3 max-w-2xl font-serif text-[15px] leading-relaxed text-on-surface-variant">
+        Unggah buku baru, atur metadata, lalu publikasikan. Buku draft tidak akan tampil
+        di katalog pembaca sampai Anda menekan Publikasikan.
       </p>
 
-      <div className="mt-8 rounded-2xl border border-dashed border-surface-container-highest bg-surface-container-lowest p-10 text-center shadow-sm">
-        <span className="material-symbols-outlined text-[40px] text-primary/60">upload_file</span>
-        <h2 className="mt-3 font-serif text-xl text-on-surface">Form unggah segera hadir</h2>
-        <p className="mx-auto mt-2 max-w-md text-sm text-on-surface-variant">
-          Halaman ini sudah dilindungi khusus admin. Form metadata, unggah PDF,
-          dan tombol publikasi akan ditambahkan pada tahap berikutnya.
-        </p>
-        <span className="mt-5 inline-flex items-center gap-2 rounded-full bg-tertiary-fixed/60 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-tertiary">
-          <span className="h-1.5 w-1.5 rounded-full bg-tertiary" />
-          Tahap berikutnya
-        </span>
-      </div>
+      <UploadManager books={uploadBooks} categories={uploadCategories} />
     </div>
   );
 }

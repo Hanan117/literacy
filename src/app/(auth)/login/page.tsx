@@ -17,6 +17,17 @@ function friendlyAuthError(message?: string) {
   if (text.includes("rate limit") || text.includes("too many")) {
     return "Terlalu banyak percobaan. Coba lagi beberapa saat lagi.";
   }
+  if (
+    text.includes("failed to fetch") ||
+    text.includes("fetch failed") ||
+    text.includes("networkerror") ||
+    text.includes("network request failed") ||
+    text.includes("load failed") ||
+    text.includes("connection refused") ||
+    text.includes("econnrefused")
+  ) {
+    return "Server autentikasi tidak dapat dihubungi. Pastikan Supabase lokal berjalan, lalu coba lagi.";
+  }
   return "Gagal masuk. Coba lagi.";
 }
 
@@ -128,12 +139,16 @@ function LoginContent() {
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 lg:p-16 bg-background">
         <div className="w-full max-w-[460px] flex flex-col">
           <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-2.5">
+            <Link
+              href="/"
+              aria-label="Kembali ke beranda Literacy"
+              className="flex items-center gap-2.5 rounded-sm transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+            >
               <div className="w-7 h-7 rounded bg-primary flex items-center justify-center text-on-primary text-sm shadow-sm">
                 L
               </div>
               <span className="text-lg font-semibold text-on-surface tracking-tight">Literacy</span>
-            </div>
+            </Link>
           </div>
 
           <div className="mb-8">

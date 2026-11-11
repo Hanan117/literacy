@@ -122,11 +122,17 @@ export default function RegisterPage() {
 
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 lg:p-16 bg-background">
         <div className="w-full max-w-[460px] flex flex-col">
-          <div className="flex items-center gap-2.5 mb-8">
-            <div className="w-7 h-7 rounded bg-primary flex items-center justify-center text-on-primary text-sm shadow-sm">
-              L
-            </div>
-            <span className="text-lg font-semibold text-on-surface tracking-tight">Literacy</span>
+          <div className="mb-8">
+            <Link
+              href="/"
+              aria-label="Kembali ke beranda Literacy"
+              className="flex w-fit items-center gap-2.5 rounded-sm transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+            >
+              <div className="w-7 h-7 rounded bg-primary flex items-center justify-center text-on-primary text-sm shadow-sm">
+                L
+              </div>
+              <span className="text-lg font-semibold text-on-surface tracking-tight">Literacy</span>
+            </Link>
           </div>
 
           <div className="mb-8">
