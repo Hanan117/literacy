@@ -24,6 +24,7 @@ model User {
   updatedAt             DateTime        @updatedAt
   progress              Progress[]
   bookmarks             Bookmark[]
+  reviews               Review[]
   preference            UserPreference?
   @@map("users")
 }
@@ -70,6 +71,7 @@ model Book {
   updatedAt    DateTime  @updatedAt
   progress     Progress[]
   bookmarks    Bookmark[]
+  reviews      Review[]
   @@index([categoryId])
   @@index([isPublished, deletedAt])
   @@map("books")
@@ -104,4 +106,21 @@ model Bookmark {
   createdAt DateTime @default(now())
   @@index([userId, bookId, page])
   @@map("bookmarks")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookId    String
+  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  rating    Int
+  title     String
+  body      String   @db.Text
+  quote     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@unique([userId, bookId])
+  @@index([bookId, createdAt(sort: Desc)])
+  @@map("reviews")
 }
