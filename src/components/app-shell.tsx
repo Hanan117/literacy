@@ -20,7 +20,7 @@ export type AppUser = {
 
 const navItems: NavItem[] = [
   { label: "Katalog Koleksi", icon: "local_library", href: "/katalog" },
-  { label: "Mode Baca", icon: "auto_stories" },
+  { label: "Mode Baca", icon: "auto_stories", href: "/read" },
   { label: "Detail & Catatan", icon: "sticky_note_2" },
   { label: "Rating & Ulasan", icon: "star" },
   { label: "Upload PDF", icon: "upload_file", href: "/upload", admin: true },
@@ -155,12 +155,6 @@ export default function AppShell({
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const isAdmin = user?.role === "ADMIN";
-  const initial = (user?.name?.trim() || user?.email || "P").charAt(0).toUpperCase();
-
-  const focusSearch = () => {
-    const el = document.getElementById("catalog-search") as HTMLInputElement | null;
-    el?.focus();
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -206,45 +200,16 @@ export default function AppShell({
 
       {/* Main column */}
       <div className="lg:pl-[264px]">
-        <header className="sticky top-0 z-30 border-b border-surface-container-high/70 bg-background/85 backdrop-blur-md">
-          <div className="flex items-center justify-between gap-4 px-5 md:px-8 h-16">
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => setOpen(true)}
-                className="lg:hidden w-9 h-9 grid place-items-center rounded-lg text-on-surface-variant hover:bg-surface-container"
-                aria-label="Buka menu"
-              >
-                <span className="material-symbols-outlined text-[22px]">menu</span>
-              </button>
-
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-[999px] bg-tertiary-fixed/60 text-tertiary text-[10px] font-bold uppercase tracking-[0.14em]">
-                <span className="w-1.5 h-1.5 rounded-[999px] bg-tertiary" />
-                Tersinkronisasi
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2.5">
-              <button
-                type="button"
-                onClick={focusSearch}
-                className="hidden sm:flex items-center gap-2 w-56 xl:w-64 px-3.5 py-2 rounded-[999px] bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-colors"
-                title="Cari kurasi bacaan"
-              >
-                <span className="material-symbols-outlined text-[18px]">search</span>
-                <span className="text-sm truncate">Cari kurasi bacaan…</span>
-                <kbd className="ml-auto text-[10px] text-outline tracking-wider">⌘K</kbd>
-              </button>
-
-              <button
-                type="button"
-                className="w-9 h-9 rounded-[999px] bg-primary text-on-primary grid place-items-center text-sm font-semibold hover:bg-primary-container transition-colors"
-                aria-label="Akun pengguna"
-              >
-                {initial}
-              </button>
-            </div>
-          </div>
+        {/* Bar tipis khusus mobile untuk membuka sidebar. */}
+        <header className="sticky top-0 z-30 flex h-14 items-center border-b border-surface-container-high/70 bg-background/85 px-5 backdrop-blur-md lg:hidden">
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            className="w-9 h-9 grid place-items-center rounded-lg text-on-surface-variant hover:bg-surface-container"
+            aria-label="Buka menu"
+          >
+            <span className="material-symbols-outlined text-[22px]">menu</span>
+          </button>
         </header>
 
         <main>{children}</main>

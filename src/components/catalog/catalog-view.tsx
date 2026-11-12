@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { CatalogBook, CatalogCategory } from "@/lib/data/catalog";
 
@@ -85,11 +86,11 @@ export default function CatalogView({
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-[999px] bg-primary" />
             <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-on-surface-variant">
-              Arsip Kurasi Litera • Edisi Musim Semi
+              Arsip Kurasi Literacy
             </span>
           </div>
           <h1 className="mt-3 font-serif text-3xl font-medium tracking-tight text-on-surface md:text-4xl lg:text-[2.6rem]">
-            Katalog &amp; Arsip Bacaan
+          Katalog &amp; Arsip 
           </h1>
           <p className="mt-3 max-w-lg font-serif text-[15px] leading-relaxed text-on-surface-variant">
             Koleksi karya terpilih untuk mengasah daya renung, kejernihan pikiran, dan ketenangan budi.
@@ -176,15 +177,13 @@ export default function CatalogView({
               )}
 
               <div className="mt-5 flex flex-wrap items-center justify-center gap-4">
-                <button
-                  type="button"
-                  disabled
-                  title="Mode baca segera hadir"
-                  className="inline-flex items-center gap-2 rounded-[0.4rem] bg-primary px-4 py-2.5 text-sm font-medium text-on-primary opacity-60 shadow-sm"
+                <Link
+                  href={`/books/${spotlight.slug}`}
+                  className="inline-flex items-center gap-2 rounded-[0.4rem] bg-primary px-4 py-2.5 text-sm font-medium text-on-primary shadow-sm transition-colors hover:bg-primary-container"
                 >
                   <span className="material-symbols-outlined text-[18px]">menu_book</span>
                   Buka Arsip Buku
-                </button>
+                </Link>
                 <span className="inline-flex items-center gap-1.5 text-[11px] text-on-surface-variant">
                   <span className="material-symbols-outlined text-[16px]">offline_pin</span>
                   {spotlight.duration}
@@ -224,12 +223,16 @@ export default function CatalogView({
                 className="group flex flex-col rounded-xl bg-surface-container-lowest p-4 shadow-sm transition-all duration-300 hover:shadow-md"
               >
                 <div className="flex gap-4">
-                  <div className="relative w-[104px] shrink-0 overflow-hidden rounded-md bg-surface-container-high shadow-sm">
+                  <Link
+                    href={`/books/${book.slug}`}
+                    className="relative w-[104px] shrink-0 overflow-hidden rounded-md bg-surface-container-high shadow-sm"
+                    aria-label={`Lihat detail ${book.title}`}
+                  >
                     <div className="absolute inset-y-0 left-0 z-10 w-1.5 bg-gradient-to-r from-black/25 to-transparent" />
                     <div className="aspect-[2/3] w-full">
                       <Cover book={book} />
                     </div>
-                  </div>
+                  </Link>
 
                   <div className="flex min-w-0 flex-col py-1">
                     <span className="flex items-center gap-1.5 text-[9px] font-bold uppercase leading-tight tracking-[0.14em] text-secondary">
@@ -240,9 +243,12 @@ export default function CatalogView({
                         </span>
                       )}
                     </span>
-                    <h4 className="mt-1 line-clamp-1 font-serif text-lg leading-tight text-on-surface transition-colors group-hover:text-primary">
+                    <Link
+                      href={`/books/${book.slug}`}
+                      className="mt-1 line-clamp-1 font-serif text-lg leading-tight text-on-surface transition-colors group-hover:text-primary"
+                    >
                       {book.title}
-                    </h4>
+                    </Link>
                     <p className="mt-0.5 line-clamp-1 text-sm text-outline">{book.author}</p>
                     <span className="mt-auto flex items-center gap-1 pt-3 text-[11px] text-on-surface-variant">
                       <span className="material-symbols-outlined text-[14px]">schedule</span>
@@ -256,23 +262,20 @@ export default function CatalogView({
                     {book.series ?? "Koleksi Literacy"}
                   </span>
                   <div className="flex shrink-0 items-center gap-1.5">
-                    <button
-                      type="button"
-                      aria-label={`Simpan ${book.title}`}
-                      disabled
-                      title="Bookmark segera hadir"
-                      className="grid h-8 w-8 place-items-center rounded-lg text-on-surface-variant/50"
+                    <Link
+                      href={`/books/${book.slug}`}
+                      aria-label={`Lihat detail ${book.title}`}
+                      title="Lihat detail buku"
+                      className="grid h-8 w-8 place-items-center rounded-lg text-on-surface-variant transition-colors hover:bg-surface-container hover:text-primary"
                     >
                       <span className="material-symbols-outlined text-[18px]">bookmark_border</span>
-                    </button>
-                    <button
-                      type="button"
-                      disabled
-                      title="Mode baca segera hadir"
-                      className="rounded-lg bg-primary px-4 py-1.5 text-xs font-semibold text-on-primary opacity-60"
+                    </Link>
+                    <Link
+                      href={`/read/${book.id}`}
+                      className="rounded-lg bg-primary px-4 py-1.5 text-xs font-semibold text-on-primary transition-colors hover:bg-primary-container"
                     >
                       Baca
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </article>

@@ -1,23 +1,17 @@
 import AppShell from "@/components/app-shell";
-import { createClient } from "@/lib/supabase/server";
-import { syncUserToPrisma } from "@/lib/auth/sync-user";
+import { getAppUser } from "@/lib/auth/get-app-user";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const syncedUser = user ? await syncUserToPrisma(user) : null;
+  const user = await getAppUser();
 
   return (
     <AppShell
       user={
-        syncedUser
+        user
           ? {
-              name: syncedUser.name,
-              email: syncedUser.email,
-              role: syncedUser.role,
+              name: user.name,
+              email: user.email,
+              role: user.role,
             }
           : null
       }

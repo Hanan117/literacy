@@ -41,5 +41,8 @@ node_modules
 .next
 .npm-cache
 
+# Aset hasil salinan (dibuat oleh scripts/copy-pdf-worker.mjs)
+/public/pdf.worker.min.mjs
+
 # Docker (keep local overrides out of git)
 docker-compose.override.yml

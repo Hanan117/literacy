@@ -1,6 +1,24 @@
 import Link from "next/link";
+import { resolveCoverUrl } from "@/lib/books/cover-url";
+import { prisma } from "@/lib/prisma";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const published = await prisma.book.findMany({
+    where: { isPublished: true, deletedAt: null },
+    include: { category: true },
+    orderBy: { createdAt: "desc" },
+    take: 4,
+  });
+
+  const recommendations = published.map((book) => ({
+    id: book.id,
+    slug: book.slug,
+    title: book.title,
+    author: book.author,
+    category: book.category?.name ?? "Tanpa Kategori",
+    cover: resolveCoverUrl(book.coverUrl),
+  }));
+
   return (
     <div className="w-full max-w-6xl mx-auto px-gutter py-space-xl flex flex-col gap-space-xl">
       <section className="flex flex-col gap-space-lg pt-space-md">
@@ -139,19 +157,29 @@ export default function HomePage() {
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[
-            { slug: "buku-1", title: "Filosofi Teras", author: "Henry Manampiring", category: "Filsafat" },
-            { slug: "buku-2", title: "Atomic Habits", author: "James Clear", category: "Pengembangan Diri" },
-            { slug: "buku-3", title: "Sapiens", author: "Yuval Noah Harari", category: "Sejarah & Sains" },
-            { slug: "buku-4", title: "Berpikir, Cepat dan Lambat", author: "Daniel Kahneman", category: "Psikologi" },
-          ].map((book) => (
+          {recommendations.length === 0 ? (
+            <p className="col-span-full rounded-xl bg-surface-container-lowest p-6 text-center text-sm text-on-surface-variant shadow-sm">
+              Belum ada buku yang dipublikasikan. Koleksi akan tampil di sini setelah admin
+              menerbitkannya.
+            </p>
+          ) : null}
+          {recommendations.map((book) => (
             <article
-              key={book.slug}
+              key={book.id}
               className="group relative flex flex-col bg-surface-container-lowest rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300"
             >
               <Link href={`/books/${book.slug}`} className="flex flex-col flex-1">
                 <div className="relative aspect-[2/3] w-full rounded-md overflow-hidden mb-4 shadow bg-surface-container-high flex items-center justify-center">
-                  <span className="material-symbols-outlined text-[32px] text-outline/40">menu_book</span>
+                  {book.cover ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={book.cover}
+                      alt={`Sampul ${book.title}`}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <span className="material-symbols-outlined text-[32px] text-outline/40">menu_book</span>
+                  )}
                 </div>
                 <div className="flex flex-col flex-1 justify-between">
                   <div>
@@ -167,13 +195,13 @@ export default function HomePage() {
                   </div>
                 </div>
               </Link>
-              <button
-                type="button"
+              <Link
+                href={`/books/${book.slug}`}
                 className="absolute top-6 right-6 w-8 h-8 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface-variant hover:text-primary flex items-center justify-center transition-colors shadow-sm"
-                aria-label={`Simpan ${book.title}`}
+                aria-label={`Lihat detail ${book.title}`}
               >
                 <span className="material-symbols-outlined text-[18px]">bookmark_border</span>
-              </button>
+              </Link>
             </article>
           ))}
         </div>
