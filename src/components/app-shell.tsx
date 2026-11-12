@@ -21,8 +21,8 @@ export type AppUser = {
 const navItems: NavItem[] = [
   { label: "Katalog Koleksi", icon: "local_library", href: "/katalog" },
   { label: "Mode Baca", icon: "auto_stories", href: "/read" },
-  { label: "Detail & Catatan", icon: "sticky_note_2" },
-  { label: "Rating & Ulasan", icon: "star" },
+  { label: "Detail & Catatan", icon: "sticky_note_2", href: "/books" },
+  { label: "Rating & Ulasan", icon: "star", href: "/reviews" },
   { label: "Upload PDF", icon: "upload_file", href: "/upload", admin: true },
   { label: "Pengaturan", icon: "settings" },
 ];
@@ -51,8 +51,13 @@ function NavLinks({ pathname, isAdmin }: { pathname: string; isAdmin: boolean })
       {navItems.map((item) => {
         if (item.admin && !isAdmin) return null;
 
+        const isReviewsPath = pathname.endsWith("/reviews");
         const active = item.href
-          ? pathname === item.href || pathname.startsWith(`${item.href}/`)
+          ? item.href === "/reviews"
+            ? pathname === "/reviews" || isReviewsPath
+            : isReviewsPath
+              ? false
+              : pathname === item.href || pathname.startsWith(`${item.href}/`)
           : false;
 
         const inner = (
@@ -105,9 +110,41 @@ function NavLinks({ pathname, isAdmin }: { pathname: string; isAdmin: boolean })
 
 function UserCard({ user }: { user?: AppUser | null }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [signingOut, setSigningOut] = useState(false);
-  const name = user?.name?.trim() || user?.email?.split("@")[0] || "Pembaca";
-  const roleLabel = user?.role === "ADMIN" ? "Administrator" : "Pembaca";
+
+  if (!user) {
+    const returnTo = encodeURIComponent(pathname || "/katalog");
+
+    return (
+      <div className="rounded-xl border border-surface-container-high bg-surface-container-lowest p-3 shadow-sm">
+        <div className="flex items-center gap-2">
+          <span className="material-symbols-outlined text-[18px] text-primary">login</span>
+          <span className="text-sm font-semibold text-on-surface">Masuk untuk menyimpan</span>
+        </div>
+        <p className="mt-1 text-[11px] leading-relaxed text-on-surface-variant">
+          Progres bacaan dan catatan marjin tersimpan otomatis setelah masuk.
+        </p>
+        <div className="mt-3 flex gap-2">
+          <Link
+            href={`/login?returnTo=${returnTo}`}
+            className="flex-1 rounded-lg bg-primary px-3 py-2 text-center text-xs font-semibold text-on-primary transition-colors hover:bg-primary-container"
+          >
+            Masuk
+          </Link>
+          <Link
+            href="/register"
+            className="flex-1 rounded-lg bg-surface-container px-3 py-2 text-center text-xs font-semibold text-on-surface transition-colors hover:bg-surface-container-high"
+          >
+            Daftar
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const name = user.name?.trim() || user.email.split("@")[0] || "Pembaca";
+  const roleLabel = user.role === "ADMIN" ? "Administrator" : "Pembaca";
   const initial = name.charAt(0).toUpperCase();
 
   const handleSignOut = async () => {
