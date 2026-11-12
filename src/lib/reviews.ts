@@ -15,6 +15,15 @@ export type RatingBucket = {
   percent: number;
 };
 
+export type ReviewFilter = "semua" | "kurator" | "kutipan";
+export type ReviewSort = "terbaru" | "tertinggi";
+
+export type ReviewSummary = {
+  average: number | null;
+  total: number;
+  distribution: RatingBucket[];
+};
+
 export type ReviewInput = {
   rating: number;
   title: string;
