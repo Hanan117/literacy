@@ -80,5 +80,11 @@ export async function proxy(request: NextRequest) {
 export const config = {
   // `/read` ikut di-match agar cookie sesi tetap segar, tetapi tidak dikunci
   // karena guest harus bisa membaca sampel halaman pertama.
-  matcher: ["/katalog/:path*", "/dashboard/:path*", "/upload/:path*", "/read/:path*"],
+  matcher: [
+    "/katalog/:path*",
+    "/dashboard/:path*",
+    "/upload/:path*",
+    "/read/:path*",
+    "/books/:path*",
+  ],
 };
