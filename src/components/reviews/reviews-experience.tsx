@@ -165,6 +165,7 @@ export default function ReviewsExperience({
       window.clearTimeout(focusTimer);
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", onKeyDown);
+      setHoverRating(0);
       triggerRef.current?.focus();
     };
   }, [modalOpen]);
@@ -560,8 +561,8 @@ export default function ReviewsExperience({
       )}
 
       <p className="mt-6 text-center text-[11px] leading-relaxed text-on-surface-variant">
-        Semua ulasan di Litera dimoderasi untuk menjaga diskursus yang beradab,
-        berbobot, dan bernas.
+        Ulasan ditulis oleh pembaca dan menjadi tanggung jawab penulisnya.
+        Sampaikan kritik yang beradab dan berbobot.
       </p>
 
       {modalOpen && (
