@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   RATING_LABELS,
   formatReviewDate,
@@ -116,17 +116,57 @@ export default function ReviewsExperience({
   const [busy, setBusy] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const titleInputRef = useRef<HTMLInputElement>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
 
   const loginHref = `/login?returnTo=${encodeURIComponent(returnTo)}`;
   const quickRating = hoverRating || ownReview?.rating || 0;
 
   useEffect(() => {
     if (!modalOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const focusTimer = window.setTimeout(() => titleInputRef.current?.focus(), 0);
+
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setModalOpen(false);
+      if (event.key === "Escape") {
+        setModalOpen(false);
+        return;
+      }
+      if (event.key !== "Tab") return;
+
+      const dialog = dialogRef.current;
+      if (!dialog) return;
+
+      const focusable = Array.from(
+        dialog.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+      ).filter((element) => element.offsetParent !== null);
+
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
+
     window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+
+    return () => {
+      window.clearTimeout(focusTimer);
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+      triggerRef.current?.focus();
+    };
   }, [modalOpen]);
 
   const buildHref = (next: {
@@ -150,6 +190,7 @@ export default function ReviewsExperience({
       router.push(loginHref);
       return;
     }
+    triggerRef.current = document.activeElement as HTMLElement | null;
     setRating(initialRating ?? ownReview?.rating ?? 5);
     setTitle(ownReview?.title ?? "");
     setQuote(ownReview?.quote ?? "");
@@ -427,7 +468,7 @@ export default function ReviewsExperience({
                 <RatingStars value={review.rating} />
               </div>
 
-              <h2 className="mt-4 font-serif text-lg font-semibold leading-snug text-on-surface">
+              <h2 className="mt-4 break-words font-serif text-lg font-semibold leading-snug text-on-surface [overflow-wrap:anywhere]">
                 {review.title}
               </h2>
 
@@ -436,13 +477,13 @@ export default function ReviewsExperience({
                   <span className="material-symbols-outlined text-[18px] text-primary/70">
                     format_quote
                   </span>
-                  <p className="font-serif text-sm italic leading-relaxed text-on-surface">
+                  <p className="break-words font-serif text-sm italic leading-relaxed text-on-surface [overflow-wrap:anywhere]">
                     “{review.quote}”
                   </p>
                 </blockquote>
               )}
 
-              <p className="mt-3 whitespace-pre-line font-serif text-[15px] leading-relaxed text-on-surface-variant">
+              <p className="mt-3 whitespace-pre-line break-words font-serif text-[15px] leading-relaxed text-on-surface-variant [overflow-wrap:anywhere]">
                 {review.body}
               </p>
 
@@ -531,6 +572,7 @@ export default function ReviewsExperience({
           }}
         >
           <div
+            ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-labelledby="review-dialog-title"
@@ -598,6 +640,7 @@ export default function ReviewsExperience({
                 </label>
                 <input
                   id="review-title"
+                  ref={titleInputRef}
                   type="text"
                   maxLength={120}
                   value={title}

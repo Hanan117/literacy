@@ -64,6 +64,7 @@ const sampleBooks = [
 
 const sampleReviews = [
   {
+    userId: "demo-reviewer-saraswati",
     email: "saraswati@contoh.literacy",
     name: "Dr. Saraswati",
     role: Role.ADMIN,
@@ -74,6 +75,7 @@ const sampleReviews = [
     body: "Pendekatan penulis dalam menerjemahkan gagasan Stoa ke bahasa sehari-hari membuat filsafat ini terasa dekat, bukan kaku. Setiap bab memberi ruang untuk merenung tanpa menggurui. Edisi ini berhasil menjaga kedalaman konsep sekaligus tetap ringan untuk dibaca sambil menikmati secangkir teh.",
   },
   {
+    userId: "demo-reviewer-reza",
     email: "reza@contoh.literacy",
     name: "Reza Pratama",
     role: Role.READER,
@@ -83,6 +85,7 @@ const sampleReviews = [
     body: "Saya membaca satu bagian setiap pagi sebelum membuka surel. Perlahan, kebiasaan kecil ini mengubah cara saya merespons hal-hal yang di luar kendali. Buku yang sederhana, tetapi dampaknya terasa nyata dalam rutinitas harian.",
   },
   {
+    userId: "demo-reviewer-maya",
     email: "maya@contoh.literacy",
     name: "Maya Wulandari",
     role: Role.READER,
@@ -132,12 +135,27 @@ async function main() {
     }
 
     for (const sample of sampleReviews) {
-      const { email, name, role, rating, title, quote, body } = sample;
-      const reviewer = await prisma.user.upsert({
-        where: { email },
-        update: { name, role },
-        create: { email, name, role },
+      const { userId, email, name, role, rating, title, quote, body } = sample;
+      let reviewer = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { id: true },
       });
+
+      if (!reviewer) {
+        reviewer = await prisma.user
+          .create({
+            data: { id: userId, email, name, role },
+            select: { id: true },
+          })
+          .catch(() => null);
+
+        if (!reviewer) {
+          console.log(
+            `Seed ulasan dilewati untuk ${email}: email sudah dipakai user lain.`
+          );
+          continue;
+        }
+      }
 
       await prisma.review.upsert({
         where: {
