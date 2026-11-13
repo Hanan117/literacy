@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Role } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
 const connectionString = process.env.DATABASE_URL;
@@ -62,6 +62,37 @@ const sampleBooks = [
   },
 ];
 
+const sampleReviews = [
+  {
+    email: "saraswati@contoh.literacy",
+    name: "Dr. Saraswati",
+    role: Role.ADMIN,
+    rating: 5,
+    title: "Stoikisme yang Membumi untuk Pembaca Modern",
+    quote:
+      "Kita tidak dapat mengendalikan peristiwa, tetapi kita dapat mengendalikan penilaian kita atasnya.",
+    body: "Pendekatan penulis dalam menerjemahkan gagasan Stoa ke bahasa sehari-hari membuat filsafat ini terasa dekat, bukan kaku. Setiap bab memberi ruang untuk merenung tanpa menggurui. Edisi ini berhasil menjaga kedalaman konsep sekaligus tetap ringan untuk dibaca sambil menikmati secangkir teh.",
+  },
+  {
+    email: "reza@contoh.literacy",
+    name: "Reza Pratama",
+    role: Role.READER,
+    rating: 5,
+    title: "Panduan Tenang Menghadapi Hari yang Riuh",
+    quote: null,
+    body: "Saya membaca satu bagian setiap pagi sebelum membuka surel. Perlahan, kebiasaan kecil ini mengubah cara saya merespons hal-hal yang di luar kendali. Buku yang sederhana, tetapi dampaknya terasa nyata dalam rutinitas harian.",
+  },
+  {
+    email: "maya@contoh.literacy",
+    name: "Maya Wulandari",
+    role: Role.READER,
+    rating: 4,
+    title: "Peta Awal yang Jernih untuk Memahami Stoa",
+    quote: "Fokus pada hal yang berada dalam kendali kita.",
+    body: "Sebagai pembaca yang baru mengenal stoikisme, saya menghargai susunan bab yang runtut dan catatan istilah yang jelas. Beberapa bagian terasa sedikit berulang, namun secara keseluruhan buku ini berhasil menjadi pintu masuk yang ramah tanpa kehilangan nuansa.",
+  },
+];
+
 async function main() {
   const categoryIds = new Map<string, string>();
 
@@ -86,6 +117,45 @@ async function main() {
       });
     }
     console.log(`Seed buku contoh selesai (${sampleBooks.length} buku).`);
+  }
+
+  if (process.env.SEED_SAMPLE_REVIEWS === "1") {
+    const bookSlug = process.env.SEED_REVIEW_BOOK_SLUG?.trim() || "filosofi-teras";
+    const book = await prisma.book.findFirst({
+      where: { slug: bookSlug, deletedAt: null },
+      select: { id: true },
+    });
+
+    if (!book) {
+      console.log(`Seed ulasan dilewati: buku "${bookSlug}" tidak ditemukan.`);
+      return;
+    }
+
+    for (const sample of sampleReviews) {
+      const { email, name, role, rating, title, quote, body } = sample;
+      const reviewer = await prisma.user.upsert({
+        where: { email },
+        update: { name, role },
+        create: { email, name, role },
+      });
+
+      await prisma.review.upsert({
+        where: {
+          userId_bookId: { userId: reviewer.id, bookId: book.id },
+        },
+        update: { rating, title, quote, body },
+        create: {
+          userId: reviewer.id,
+          bookId: book.id,
+          rating,
+          title,
+          quote,
+          body,
+        },
+      });
+    }
+
+    console.log(`Seed ulasan contoh selesai (${sampleReviews.length} ulasan).`);
   }
 }
 
