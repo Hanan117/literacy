@@ -136,10 +136,13 @@ describe("metadata readers", () => {
   test("reads profile strings and ignores junk", () => {
     expect(
       readProfileMetadata({ handle: "ahmad.kurator", bio: "Halo" })
-    ).toEqual({ handle: "ahmad.kurator", bio: "Halo" });
-    expect(readProfileMetadata({ handle: 42, bio: null })).toEqual({
+    ).toEqual({ handle: "ahmad.kurator", bio: "Halo", avatarUrl: "" });
+    expect(
+      readProfileMetadata({ handle: 42, bio: null, avatarUrl: " https://x.test/a.png " })
+    ).toEqual({
       handle: "",
       bio: "",
+      avatarUrl: "https://x.test/a.png",
     });
   });
 

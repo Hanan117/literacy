@@ -106,6 +106,7 @@ export default async function PengaturanPage() {
         role: user.role,
         handle: storedProfile.handle || emailPrefix,
         bio: storedProfile.bio,
+        avatarUrl: storedProfile.avatarUrl,
         emailVerified,
         memberSince: formatDate(account?.createdAt ?? new Date()),
         updatedAtLabel: formatDate(

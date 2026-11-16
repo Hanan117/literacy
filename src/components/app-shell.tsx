@@ -16,6 +16,7 @@ export type AppUser = {
   name: string | null;
   email: string;
   role: string;
+  avatarUrl?: string | null;
 };
 
 const navItems: NavItem[] = [
@@ -162,8 +163,17 @@ function UserCard({ user }: { user?: AppUser | null }) {
 
   return (
     <div className="flex items-center gap-3 p-3 rounded-xl bg-surface-container-lowest border border-surface-container-high shadow-sm">
-      <span className="w-9 h-9 shrink-0 rounded-[999px] bg-primary text-on-primary grid place-items-center text-sm font-semibold">
-        {initial}
+      <span className="w-9 h-9 shrink-0 overflow-hidden rounded-[999px] bg-primary text-on-primary grid place-items-center text-sm font-semibold">
+        {user.avatarUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={user.avatarUrl}
+            alt={`Foto profil ${name}`}
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          initial
+        )}
       </span>
       <span className="flex flex-col leading-tight min-w-0">
         <span className="text-sm font-semibold text-on-surface truncate">{name}</span>

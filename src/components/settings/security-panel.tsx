@@ -318,47 +318,6 @@ export default function SecurityPanel({
 
         <div className="flex flex-col gap-[1.5rem] lg:col-span-5">
           <div className="flex flex-col gap-[1rem] rounded-xl bg-surface-container-low p-[1.5rem] shadow-sm">
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-[20px] text-primary">
-                  fingerprint
-                </span>
-                <h4 className="font-headline-sm text-headline-sm text-on-surface">
-                  Kunci Akses / Passkey
-                </h4>
-              </div>
-              <p className="mt-1 font-ui-body-md text-[13px] text-on-surface-variant">
-                Masuk instan menggunakan Touch ID, Face ID, atau kunci perangkat
-                tanpa kata sandi.
-              </p>
-            </div>
-
-            <div className="flex flex-col items-center gap-1 rounded-lg bg-surface-container-lowest px-4 py-5 text-center shadow-sm">
-              <span className="material-symbols-outlined text-[26px] text-outline">
-                key_off
-              </span>
-              <p className="font-label-md text-label-md font-semibold text-on-surface">
-                Belum ada passkey
-              </p>
-              <p className="font-label-sm text-label-sm text-on-surface-variant">
-                Dukungan WebAuthn/FIDO2 segera hadir.
-              </p>
-            </div>
-
-            <button
-              type="button"
-              disabled
-              title="Passkey segera hadir"
-              className="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-lg bg-surface-container px-[1rem] py-2.5 font-label-md text-label-md font-semibold text-on-surface-variant"
-            >
-              <span className="material-symbols-outlined text-[18px]">
-                add_circle
-              </span>
-              Tambah Kunci Sandi Baru
-            </button>
-          </div>
-
-          <div className="flex flex-col gap-[1rem] rounded-xl bg-surface-container-low p-[1.5rem] shadow-sm">
             <div className="flex items-center justify-between">
               <h4 className="font-headline-sm text-headline-sm text-on-surface">
                 Sesi Terdaftar

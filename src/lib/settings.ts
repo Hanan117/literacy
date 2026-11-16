@@ -16,6 +16,7 @@ export const DEFAULT_PRIVACY: PrivacyPreferences = {
 export type ProfileMetadata = {
   handle: string;
   bio: string;
+  avatarUrl: string;
 };
 
 export type ReadingProgressInput = {
@@ -130,6 +131,7 @@ export function readProfileMetadata(metadata: unknown): ProfileMetadata {
   return {
     handle: typeof raw.handle === "string" ? raw.handle.trim() : "",
     bio: typeof raw.bio === "string" ? raw.bio.trim() : "",
+    avatarUrl: typeof raw.avatarUrl === "string" ? raw.avatarUrl.trim() : "",
   };
 }
 

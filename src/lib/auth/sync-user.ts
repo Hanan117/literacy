@@ -7,6 +7,7 @@ export type SyncedUser = {
   email: string;
   name: string | null;
   role: Role;
+  avatarUrl: string | null;
 };
 
 function resolveRole(user: SupabaseUser): Role {
@@ -22,6 +23,11 @@ function resolveName(user: SupabaseUser): string | null {
   return null;
 }
 
+function resolveAvatarUrl(user: SupabaseUser): string | null {
+  const value = user.user_metadata?.avatarUrl;
+  return typeof value === "string" && value.trim() ? value.trim() : null;
+}
+
 /**
  * Menjamin user Supabase punya baris di tabel `users` Prisma.
  * `id` memakai UID Supabase agar relasi Progress/Bookmark konsisten.
@@ -31,10 +37,12 @@ export async function syncUserToPrisma(user: SupabaseUser): Promise<SyncedUser> 
   const name = resolveName(user);
   const role = resolveRole(user);
 
-  return prisma.user.upsert({
+  const row = await prisma.user.upsert({
     where: { id: user.id },
     update: { email, name, role },
     create: { id: user.id, email, name, role },
     select: { id: true, email: true, name: true, role: true },
   });
+
+  return { ...row, avatarUrl: resolveAvatarUrl(user) };
 }

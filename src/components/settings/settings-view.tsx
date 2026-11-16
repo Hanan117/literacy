@@ -17,6 +17,7 @@ export type SettingsProfile = {
   role: string;
   handle: string;
   bio: string;
+  avatarUrl: string;
   emailVerified: boolean;
   memberSince: string;
   updatedAtLabel: string;
@@ -142,6 +143,68 @@ export default function SettingsView({
   const isCurator = profile.role === "ADMIN";
   const avatarText = initials(profile.name, profile.email);
 
+  const [avatarUrl, setAvatarUrl] = useState(profile.avatarUrl);
+  const [avatarPending, setAvatarPending] = useState(false);
+  const [avatarError, setAvatarError] = useState<string | null>(null);
+  const avatarInput = useRef<HTMLInputElement | null>(null);
+
+  const uploadAvatar = async (file: File) => {
+    if (avatarPending) return;
+
+    setAvatarPending(true);
+    setAvatarError(null);
+
+    try {
+      const form = new FormData();
+      form.append("file", file);
+
+      const response = await fetch("/api/profile/avatar", {
+        method: "POST",
+        body: form,
+      });
+      const payload = (await response.json().catch(() => null)) as
+        | { avatarUrl?: string; error?: string }
+        | null;
+
+      if (!response.ok) {
+        setAvatarError(payload?.error ?? "Gagal mengunggah foto profil.");
+        return;
+      }
+
+      setAvatarUrl(payload?.avatarUrl ?? "");
+      showToast("Foto profil diperbarui.");
+      router.refresh();
+    } catch {
+      setAvatarError("Tidak dapat menghubungi server.");
+    } finally {
+      setAvatarPending(false);
+    }
+  };
+
+  const removeAvatar = async () => {
+    if (avatarPending) return;
+
+    setAvatarPending(true);
+    setAvatarError(null);
+
+    try {
+      const response = await fetch("/api/profile/avatar", { method: "DELETE" });
+
+      if (!response.ok) {
+        setAvatarError("Gagal menghapus foto profil.");
+        return;
+      }
+
+      setAvatarUrl("");
+      showToast("Foto profil dihapus.");
+      router.refresh();
+    } catch {
+      setAvatarError("Tidak dapat menghubungi server.");
+    } finally {
+      setAvatarPending(false);
+    }
+  };
+
   const resetProfile = () => {
     setName(profile.name);
     setHandle(profile.handle);
@@ -231,15 +294,6 @@ export default function SettingsView({
 
       <header className="mx-auto mb-[1.5rem] flex max-w-5xl flex-col justify-between gap-[1rem] md:flex-row md:items-end">
         <div className="max-w-xl">
-          <div className="mb-1 flex items-center gap-2 text-label-sm font-label-sm uppercase tracking-wider text-primary">
-            <span
-              className="material-symbols-outlined text-[15px]"
-              style={{ fontVariationSettings: "'FILL' 1" }}
-            >
-              admin_panel_settings
-            </span>
-            <span>Konfigurasi Akun Litera</span>
-          </div>
           <h1 className="font-headline-lg text-headline-lg-mobile tracking-tight text-on-surface md:text-headline-lg">
             Pengaturan &amp; Kredensial
           </h1>
@@ -249,16 +303,6 @@ export default function SettingsView({
           </p>
         </div>
 
-        <div className="flex items-center gap-[0.75rem] self-start rounded-full bg-surface-container-low px-[1rem] py-2 shadow-sm md:self-auto">
-          <span className="flex h-2 w-2 rounded-[999px] bg-tertiary" />
-          <span className="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-tertiary">
-            Tingkat Keamanan: Optimal
-          </span>
-          <span className="font-label-sm text-label-sm text-outline-variant">•</span>
-          <span className="font-label-sm text-label-sm text-on-surface-variant">
-            {profile.emailVerified ? "Email Terverifikasi" : "Email Belum Diverifikasi"}
-          </span>
-        </div>
       </header>
 
       <div className="mx-auto mb-[1.5rem] max-w-5xl">
@@ -306,17 +350,39 @@ export default function SettingsView({
             <div className="flex flex-col items-start justify-between gap-[1.5rem] md:flex-row md:items-center">
               <div className="flex items-center gap-[1.5rem]">
                 <div className="group relative">
-                  <div className="grid h-20 w-20 place-items-center rounded-[999px] bg-primary font-headline-md text-headline-md text-on-primary shadow-md ring-2 ring-surface-container-highest">
-                    {avatarText}
+                  <div className="grid h-20 w-20 place-items-center overflow-hidden rounded-[999px] bg-primary font-headline-md text-headline-md text-on-primary shadow-md ring-2 ring-surface-container-highest">
+                    {avatarUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={avatarUrl}
+                        alt={`Foto profil ${profile.name}`}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      avatarText
+                    )}
                   </div>
+                  <input
+                    ref={avatarInput}
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp"
+                    className="hidden"
+                    onChange={(event) => {
+                      const file = event.target.files?.[0];
+                      event.target.value = "";
+                      if (file) void uploadAvatar(file);
+                    }}
+                  />
                   <button
                     type="button"
-                    disabled
-                    title="Unggah foto segera hadir"
-                    className="absolute -bottom-1 -right-1 flex h-7 w-7 cursor-not-allowed items-center justify-center rounded-[999px] bg-surface-container-highest text-on-surface-variant shadow-md"
+                    onClick={() => avatarInput.current?.click()}
+                    disabled={avatarPending}
+                    title="Ganti foto profil"
+                    aria-label="Ganti foto profil"
+                    className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-[999px] bg-surface-container-highest text-on-surface-variant shadow-md transition-colors hover:bg-surface-container hover:text-primary disabled:opacity-60"
                   >
                     <span className="material-symbols-outlined text-[15px]">
-                      photo_camera
+                      {avatarPending ? "progress_activity" : "photo_camera"}
                     </span>
                   </button>
                 </div>
@@ -338,9 +404,6 @@ export default function SettingsView({
                       </span>
                     )}
                   </div>
-                  <p className="font-ui-body-md text-ui-body-md text-on-surface-variant">
-                    @{profile.handle} • Anggota sejak {profile.memberSince}
-                  </p>
                   <div className="mt-2 flex flex-wrap items-center gap-[1rem] font-label-sm text-label-sm text-on-surface-variant">
                     <span className="flex items-center gap-1 font-medium text-on-surface">
                       <span className="material-symbols-outlined text-[16px] text-secondary">
@@ -363,6 +426,23 @@ export default function SettingsView({
                       {stats.annotations} Anotasi Terbuka
                     </span>
                   </div>
+
+                  {avatarError && (
+                    <p className="mt-2 font-label-sm text-label-sm text-error">
+                      {avatarError}
+                    </p>
+                  )}
+
+                  {avatarUrl && (
+                    <button
+                      type="button"
+                      onClick={removeAvatar}
+                      disabled={avatarPending}
+                      className="mt-2 self-start font-label-sm text-label-sm font-semibold text-on-surface-variant transition-colors hover:text-error disabled:opacity-60"
+                    >
+                      Hapus foto
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -514,7 +594,7 @@ export default function SettingsView({
                       Koleksi Terpasang
                     </h4>
                     <p className="font-label-sm text-label-sm text-on-surface-variant">
-                      Disorot di profil publik Anda
+                      
                     </p>
                   </div>
                   <Link
@@ -565,27 +645,6 @@ export default function SettingsView({
                     ))}
                   </div>
                 )}
-              </div>
-
-              <div className="flex items-start gap-[1rem] rounded-xl bg-surface-container-lowest p-[1.5rem] shadow-sm">
-                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-secondary-fixed/40 text-secondary">
-                  <span className="material-symbols-outlined text-[22px]">
-                    verified_user
-                  </span>
-                </div>
-                <div>
-                  <h5 className="font-label-md text-label-md font-semibold text-on-surface">
-                    Kredensial Arsip Sastra
-                  </h5>
-                  <p className="mt-0.5 font-ui-body-md text-[13px] leading-relaxed text-on-surface-variant">
-                    {isCurator
-                      ? "Sebagai Kurator Utama, anotasi dan resensi Anda memiliki bobot telaah kritis publik pada katalog umum Litera."
-                      : "Sebagai pembaca terverifikasi, catatan dan ulasan Anda memperkaya diskusi publik pada katalog Litera."}
-                  </p>
-                  <p className="mt-2 font-label-sm text-label-sm text-on-surface-variant">
-                    Terakhir diperbarui {profile.updatedAtLabel}
-                  </p>
-                </div>
               </div>
             </div>
           </section>

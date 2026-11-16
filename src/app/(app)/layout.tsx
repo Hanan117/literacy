@@ -12,6 +12,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               name: user.name,
               email: user.email,
               role: user.role,
+              avatarUrl: user.avatarUrl,
             }
           : null
       }
