@@ -68,6 +68,56 @@ const config: Config = {
         sans: ['"Plus Jakarta Sans"', "system-ui", "sans-serif"],
         serif: ['"Literata"', "Georgia", "serif"],
         display: ['"Playfair Display"', "Georgia", "serif"],
+        "headline-lg": ['"Playfair Display"', "Georgia", "serif"],
+        "headline-lg-mobile": ['"Playfair Display"', "Georgia", "serif"],
+        "headline-md": ['"Playfair Display"', "Georgia", "serif"],
+        "headline-sm": ['"Playfair Display"', "Georgia", "serif"],
+        "display-lg": ['"Playfair Display"', "Georgia", "serif"],
+        "display-lg-mobile": ['"Playfair Display"', "Georgia", "serif"],
+        "ui-body-md": ['"Plus Jakarta Sans"', "system-ui", "sans-serif"],
+        "ui-body-lg": ['"Plus Jakarta Sans"', "system-ui", "sans-serif"],
+        "label-md": ['"Plus Jakarta Sans"', "system-ui", "sans-serif"],
+        "label-sm": ['"Plus Jakarta Sans"', "system-ui", "sans-serif"],
+        "reader-body-md": ['"Literata"', "Georgia", "serif"],
+        "reader-body-lg": ['"Literata"', "Georgia", "serif"],
+      },
+      fontSize: {
+        "label-sm": [
+          "11px",
+          { lineHeight: "14px", letterSpacing: "0.05em", fontWeight: "500" },
+        ],
+        "label-md": [
+          "13px",
+          { lineHeight: "18px", letterSpacing: "0.02em", fontWeight: "500" },
+        ],
+        "ui-body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+        "ui-body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+        "reader-body-md": [
+          "17px",
+          { lineHeight: "28px", letterSpacing: "0.005em", fontWeight: "400" },
+        ],
+        "reader-body-lg": [
+          "20px",
+          { lineHeight: "34px", letterSpacing: "0.01em", fontWeight: "400" },
+        ],
+        "headline-sm": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "500" }],
+        "headline-lg": [
+          "32px",
+          { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "500" },
+        ],
+        "headline-lg-mobile": [
+          "26px",
+          { lineHeight: "34px", fontWeight: "500" },
+        ],
+        "display-lg": [
+          "48px",
+          { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "500" },
+        ],
+        "display-lg-mobile": [
+          "36px",
+          { lineHeight: "44px", letterSpacing: "-0.01em", fontWeight: "500" },
+        ],
       },
       spacing: {
         "space-xs": "0.5rem",

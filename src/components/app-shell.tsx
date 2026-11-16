@@ -24,7 +24,7 @@ const navItems: NavItem[] = [
   { label: "Detail & Catatan", icon: "sticky_note_2", href: "/books" },
   { label: "Rating & Ulasan", icon: "star", href: "/reviews" },
   { label: "Upload PDF", icon: "upload_file", href: "/upload", admin: true },
-  { label: "Pengaturan", icon: "settings" },
+  { label: "Pengaturan", icon: "tune", href: "/pengaturan" },
 ];
 
 function Brand() {
