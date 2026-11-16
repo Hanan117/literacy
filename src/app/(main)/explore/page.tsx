@@ -236,13 +236,14 @@ export default function ExplorePage() {
                       </div>
                     </div>
                   </Link>
-                  <button
-                    type="button"
+                  <Link
+                    href={detailHref}
+                    title="Lihat detail buku"
+                    aria-label={`Lihat detail ${book.title}`}
                     className="absolute top-6 right-6 w-8 h-8 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface-variant hover:text-primary flex items-center justify-center transition-colors shadow-sm"
-                    aria-label={`Simpan ${book.title}`}
                   >
-                    <span className="material-symbols-outlined text-[18px]">bookmark_border</span>
-                  </button>
+                    <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                  </Link>
                 </article>
               );
             })}

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import SaveBookButton from "@/components/collection/save-book-button";
 import type { CatalogBook, CatalogCategory } from "@/lib/data/catalog";
 
 const PAGE_SIZE = 9;
@@ -40,11 +41,15 @@ export default function CatalogView({
   categories,
   spotlight,
   isAdmin,
+  isAuthenticated,
+  savedBookIds,
 }: {
   books: CatalogBook[];
   categories: CatalogCategory[];
   spotlight: CatalogBook | null;
   isAdmin: boolean;
+  isAuthenticated: boolean;
+  savedBookIds: string[];
 }) {
   const [activeFilter, setActiveFilter] = useState("semua");
   const [query, setQuery] = useState("");
@@ -262,14 +267,13 @@ export default function CatalogView({
                     {book.series ?? "Koleksi Literacy"}
                   </span>
                   <div className="flex shrink-0 items-center gap-1.5">
-                    <Link
-                      href={`/books/${book.slug}`}
-                      aria-label={`Lihat detail ${book.title}`}
-                      title="Lihat detail buku"
-                      className="grid h-8 w-8 place-items-center rounded-lg text-on-surface-variant transition-colors hover:bg-surface-container hover:text-primary"
-                    >
-                      <span className="material-symbols-outlined text-[18px]">bookmark_border</span>
-                    </Link>
+                    <SaveBookButton
+                      bookId={book.id}
+                      bookTitle={book.title}
+                      initialSaved={savedBookIds.includes(book.id)}
+                      isAuthenticated={isAuthenticated}
+                      returnTo="/katalog"
+                    />
                     <Link
                       href={`/read/${book.id}`}
                       className="rounded-lg bg-primary px-4 py-1.5 text-xs font-semibold text-on-primary transition-colors hover:bg-primary-container"

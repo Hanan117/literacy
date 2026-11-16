@@ -39,7 +39,7 @@ export default async function PengaturanPage() {
   const privacy = readPrivacyMetadata(metadata);
   const emailVerified = Boolean(authUser?.email_confirmed_at);
 
-  const [account, progressRows, annotationCount, starredBookmarks] =
+  const [account, progressRows, annotationCount, collectionRows] =
     await Promise.all([
       prisma.user.findUnique({
         where: { id: user.id },
@@ -55,14 +55,9 @@ export default async function PengaturanPage() {
       prisma.bookmark.count({
         where: { userId: user.id, note: { not: null } },
       }),
-      prisma.bookmark.findMany({
-        where: {
-          userId: user.id,
-          note: { not: null },
-          book: { deletedAt: null },
-        },
+      prisma.collectionItem.findMany({
+        where: { userId: user.id, book: { deletedAt: null } },
         orderBy: { createdAt: "desc" },
-        distinct: ["bookId"],
         select: {
           book: {
             select: {
@@ -86,7 +81,7 @@ export default async function PengaturanPage() {
     }))
   );
 
-  const favorites: FavoriteBook[] = starredBookmarks.map(({ book }) => ({
+  const favorites: FavoriteBook[] = collectionRows.map(({ book }) => ({
     id: book.id,
     slug: book.slug,
     title: book.title,
@@ -96,10 +91,9 @@ export default async function PengaturanPage() {
   }));
 
   const stats: SettingsStats = {
-    collections: progressRows.length,
+    collections: favorites.length,
     readingHours: formatReadingHours(readingMinutes),
     annotations: annotationCount,
-    favorites: favorites.length,
   };
 
   const emailPrefix = user.email.split("@")[0] || "pembaca";

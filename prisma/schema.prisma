@@ -25,6 +25,7 @@ model User {
   progress              Progress[]
   bookmarks             Bookmark[]
   reviews               Review[]
+  collections           CollectionItem[]
   preference            UserPreference?
   @@map("users")
 }
@@ -72,6 +73,7 @@ model Book {
   progress     Progress[]
   bookmarks    Bookmark[]
   reviews      Review[]
+  collections  CollectionItem[]
   @@index([categoryId])
   @@index([isPublished, deletedAt])
   @@map("books")
@@ -123,4 +125,18 @@ model Review {
   @@unique([userId, bookId])
   @@index([bookId, createdAt(sort: Desc)])
   @@map("reviews")
+}
+
+/// Buku yang disimpan pembaca ke "Rak Koleksi" (privat).
+/// Berbeda dari Bookmark yang menandai halaman tertentu di Reader.
+model CollectionItem {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookId    String
+  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  @@unique([userId, bookId])
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("collection_items")
 }

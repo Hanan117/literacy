@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BookNotes, { type BookNote } from "@/components/books/book-notes";
+import SaveBookButton from "@/components/collection/save-book-button";
 import { getAppUser } from "@/lib/auth/get-app-user";
 import { resolveCoverUrl } from "@/lib/books/cover-url";
 import { FREE_PAGES } from "@/lib/constants/reader";
@@ -32,7 +33,7 @@ export default async function BookDetailPage({
   if (!book) notFound();
   if (!book.isPublished && !isAdmin) notFound();
 
-  const [progress, notes] = await Promise.all([
+  const [progress, notes, savedItem] = await Promise.all([
     user
       ? prisma.progress.findUnique({
           where: { userId_bookId: { userId: user.id, bookId: book.id } },
@@ -56,7 +57,15 @@ export default async function BookDetailPage({
           },
         })
       : Promise.resolve([]),
+    user
+      ? prisma.collectionItem.findUnique({
+          where: { userId_bookId: { userId: user.id, bookId: book.id } },
+          select: { id: true },
+        })
+      : Promise.resolve(null),
   ]);
+
+  const inCollection = Boolean(savedItem);
 
   const cover = resolveCoverUrl(book.coverUrl);
   const duration = formatReadingDuration(book.estimatedMinutes, book.pdfPageCount);
@@ -95,7 +104,7 @@ export default async function BookDetailPage({
             className="flex items-center gap-1 transition-colors hover:text-primary"
           >
             <span className="material-symbols-outlined text-[16px]">arrow_back</span>
-            Katalog Koleksi
+            Katalog
           </Link>
           <span className="select-none text-outline-variant">/</span>
           <span className="font-medium uppercase tracking-wider text-secondary">
@@ -234,6 +243,14 @@ export default async function BookDetailPage({
               </span>
               Tulis Catatan
             </a>
+            <SaveBookButton
+              bookId={book.id}
+              bookTitle={book.title}
+              initialSaved={inCollection}
+              isAuthenticated={Boolean(user)}
+              returnTo={`/books/${book.slug}`}
+              variant="labeled"
+            />
             <Link
               href={`/books/${book.slug}/reviews`}
               className="flex items-center gap-2 rounded-lg bg-surface-container px-4 py-3 text-sm text-on-surface transition-colors hover:bg-surface-container-high"

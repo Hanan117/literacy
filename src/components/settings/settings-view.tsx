@@ -26,7 +26,6 @@ export type SettingsStats = {
   collections: number;
   readingHours: string;
   annotations: number;
-  favorites: number;
 };
 
 export type FavoriteBook = {
@@ -38,12 +37,11 @@ export type FavoriteBook = {
   cover: string | null;
 };
 
-type TabKey = "profile" | "security" | "favorites" | "preferences";
+type TabKey = "profile" | "security" | "preferences";
 
 const TABS: { key: TabKey; label: string; icon: string }[] = [
   { key: "profile", label: "Profil & Identitas", icon: "badge" },
   { key: "security", label: "Keamanan & Kata Sandi", icon: "lock_reset" },
-  { key: "favorites", label: "Koleksi Terpilih", icon: "collections_bookmark" },
   { key: "preferences", label: "Preferensi & Privasi", icon: "tune" },
 ];
 
@@ -293,11 +291,6 @@ export default function SettingsView({
                   {tab.icon}
                 </span>
                 <span>{tab.label}</span>
-                {tab.key === "favorites" && (
-                  <span className="rounded bg-surface-container-high px-1.5 py-0.5 text-label-sm font-label-sm text-on-surface-variant">
-                    {stats.favorites}
-                  </span>
-                )}
                 {tab.key === "security" && (
                   <span className="h-1.5 w-1.5 rounded-[999px] bg-primary-container" />
                 )}
@@ -353,7 +346,7 @@ export default function SettingsView({
                       <span className="material-symbols-outlined text-[16px] text-secondary">
                         menu_book
                       </span>
-                      {stats.collections} Koleksi Publik
+                      {stats.collections} Koleksi Tersimpan
                     </span>
                     <span>•</span>
                     <span className="flex items-center gap-1 font-medium text-on-surface">
@@ -524,22 +517,21 @@ export default function SettingsView({
                       Disorot di profil publik Anda
                     </p>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab("favorites")}
+                  <Link
+                    href="/koleksi"
                     className="flex items-center gap-0.5 font-label-sm text-label-sm font-semibold text-primary hover:text-primary-container"
                   >
                     Kelola
                     <span className="material-symbols-outlined text-[14px]">
                       arrow_forward
                     </span>
-                  </button>
+                  </Link>
                 </div>
 
                 {favorites.length === 0 ? (
                   <p className="rounded-lg bg-surface-container px-3 py-4 text-center font-label-sm text-label-sm text-on-surface-variant">
-                    Belum ada karya dengan catatan. Simpan catatan saat membaca
-                    untuk mengisi rak ini.
+                    Rak koleksi masih kosong. Simpan buku lewat ikon bookmark di
+                    Katalog atau halaman detail.
                   </p>
                 ) : (
                   <div className="grid grid-cols-3 gap-[0.75rem]">
@@ -602,110 +594,6 @@ export default function SettingsView({
 
       {activeTab === "security" && (
         <SecurityPanel profile={profile} onToast={showToast} />
-      )}
-
-      {activeTab === "favorites" && (
-        <div className="mx-auto flex max-w-5xl flex-col gap-[1.5rem]">
-          <div className="flex flex-col items-start justify-between gap-[1rem] rounded-xl bg-surface-container-low p-[1.5rem] shadow-sm sm:flex-row sm:items-center">
-            <div>
-              <h2 className="font-headline-sm text-headline-sm text-on-surface">
-                Koleksi Terpilih di Profil Publik
-              </h2>
-              <p className="mt-0.5 font-ui-body-md text-[13px] text-on-surface-variant">
-                Menampilkan karya yang pernah Anda beri catatan. Penyematan
-                manual ke profil publik segera hadir.
-              </p>
-            </div>
-            <button
-              type="button"
-              disabled
-              title="Penyematan manual segera hadir"
-              className="flex cursor-not-allowed items-center gap-1.5 rounded-lg bg-surface-container-high px-[1rem] py-2 font-label-md text-label-md text-on-surface-variant"
-            >
-              <span className="material-symbols-outlined text-[18px]">add</span>
-              Tambah Karya ke Favorit
-            </button>
-          </div>
-
-          <div className="grid grid-cols-2 gap-[1rem] md:grid-cols-4">
-            {favorites.slice(0, 3).map((book, index) => (
-              <div
-                key={book.id}
-                className="group flex flex-col gap-[0.75rem] rounded-xl bg-surface-container-lowest p-[1rem] shadow-sm"
-              >
-                <div className="relative aspect-[2/3] w-full overflow-hidden rounded bg-surface-container-high shadow">
-                  <Link href={`/books/${book.slug}`}>
-                    <Cover book={book} />
-                  </Link>
-                  <span className="absolute left-2 top-2 rounded bg-primary px-2 py-0.5 text-[10px] font-bold text-on-primary">
-                    Tersemat #{index + 1}
-                  </span>
-                </div>
-                <div className="flex min-w-0 flex-col">
-                  <h4 className="truncate font-label-md text-label-md font-semibold text-on-surface transition-colors group-hover:text-primary">
-                    {book.title}
-                  </h4>
-                  <p className="truncate font-label-sm text-label-sm text-on-surface-variant">
-                    {book.author}
-                  </p>
-                </div>
-                <div className="mt-auto flex items-center justify-between border-t border-surface-container pt-1">
-                  <span className="text-[11px] font-medium text-secondary">
-                    {book.series ?? "Koleksi Pribadi"}
-                  </span>
-                  <button
-                    type="button"
-                    disabled
-                    title="Lepas dari profil segera hadir"
-                    className="cursor-not-allowed p-1 text-on-surface-variant/50"
-                  >
-                    <span className="material-symbols-outlined text-[16px]">
-                      bookmark_remove
-                    </span>
-                  </button>
-                </div>
-              </div>
-            ))}
-
-            {favorites.length === 0 && (
-              <div className="col-span-2 flex flex-col items-center justify-center gap-2 rounded-xl bg-surface-container-lowest p-[2.5rem] text-center shadow-sm md:col-span-3">
-                <span className="material-symbols-outlined text-[28px] text-outline">
-                  auto_stories
-                </span>
-                <p className="font-label-md text-label-md font-semibold text-on-surface">
-                  Rak masih kosong
-                </p>
-                <p className="max-w-xs font-label-sm text-label-sm text-on-surface-variant">
-                  Buka buku di Mode Baca lalu simpan catatan margin. Karya
-                  tersebut akan muncul di sini.
-                </p>
-                <Link
-                  href="/katalog"
-                  className="mt-1 rounded-lg bg-primary px-4 py-2 font-label-md text-label-md text-on-primary transition-colors hover:bg-primary-container"
-                >
-                  Jelajahi Katalog
-                </Link>
-              </div>
-            )}
-
-            <button
-              type="button"
-              disabled
-              title="Penyematan manual segera hadir"
-              className="flex cursor-not-allowed flex-col items-center justify-center gap-[0.75rem] rounded-xl border-2 border-dashed border-outline-variant/50 p-[1rem] text-on-surface-variant/70"
-            >
-              <span className="grid h-12 w-12 place-items-center rounded-[999px] bg-surface-container">
-                <span className="material-symbols-outlined text-[24px]">add</span>
-              </span>
-              <span className="font-label-md text-label-md font-semibold">
-                Sematkan Judul #{Math.min(favorites.length + 1, 4)}
-              </span>
-              <span className="text-center text-[11px]">
-                Penyematan manual segera hadir
-              </span>
-            </button>
-          </div>
-        </div>
       )}
 
       {activeTab === "preferences" && (

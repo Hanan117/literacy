@@ -19,7 +19,8 @@ export type AppUser = {
 };
 
 const navItems: NavItem[] = [
-  { label: "Katalog Koleksi", icon: "local_library", href: "/katalog" },
+  { label: "Katalog", icon: "local_library", href: "/katalog" },
+  { label: "Rak Koleksi", icon: "collections_bookmark", href: "/koleksi" },
   { label: "Mode Baca", icon: "auto_stories", href: "/read" },
   { label: "Detail & Catatan", icon: "sticky_note_2", href: "/books" },
   { label: "Rating & Ulasan", icon: "star", href: "/reviews" },

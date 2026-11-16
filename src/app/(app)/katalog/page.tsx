@@ -15,7 +15,7 @@ export default async function KatalogPage() {
   } = await supabase.auth.getUser();
   const isAdmin = user?.app_metadata?.role === "ADMIN";
 
-  const [books, categories] = await Promise.all([
+  const [books, categories, savedItems] = await Promise.all([
     prisma.book.findMany({
       where: {
         deletedAt: null,
@@ -27,6 +27,12 @@ export default async function KatalogPage() {
     prisma.category.findMany({
       orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
     }),
+    user
+      ? prisma.collectionItem.findMany({
+          where: { userId: user.id },
+          select: { bookId: true },
+        })
+      : Promise.resolve([]),
   ]);
 
   const catalogBooks: CatalogBook[] = books.map((book) => ({
@@ -59,6 +65,8 @@ export default async function KatalogPage() {
       categories={catalogCategories}
       spotlight={spotlight}
       isAdmin={isAdmin}
+      isAuthenticated={Boolean(user)}
+      savedBookIds={savedItems.map((item) => item.bookId)}
     />
   );
 }
