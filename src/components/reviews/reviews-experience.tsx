@@ -116,6 +116,14 @@ export default function ReviewsExperience({
   const [busy, setBusy] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [books, setBooks] = useState<{
+    id: string;
+    slug: string;
+    title: string;
+    author: string;
+    coverUrl: string | null;
+  }[] | null>(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
   const titleInputRef = useRef<HTMLInputElement>(null);
   const triggerRef = useRef<HTMLElement | null>(null);
@@ -169,6 +177,23 @@ export default function ReviewsExperience({
       triggerRef.current?.focus();
     };
   }, [modalOpen]);
+
+  // Muat daftar buku yang bisa dipilih untuk diberi rating & ulasan.
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/books")
+      .then((res) => res.json())
+      .then((data) => {
+        if (!cancelled) setBooks(data.books ?? []);
+      })
+      .catch(() => {
+        if (!cancelled) setBooks([]);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const buildHref = (next: {
     filter?: ReviewFilter;
@@ -270,7 +295,81 @@ export default function ReviewsExperience({
           <span className="material-symbols-outlined text-[18px]">edit_note</span>
           {ownReview ? "Ubah Ulasan" : "Tulis Ulasan"}
         </button>
+
+        <button
+          type="button"
+          onClick={() => setPickerOpen((open) => !open)}
+          className="flex items-center gap-1 rounded-lg px-2 py-2 text-on-surface-variant transition-colors hover:bg-surface-container hover:text-on-surface"
+          title="Pilih buku lain untuk diberi ulasan"
+          aria-expanded={pickerOpen}
+        >
+          <span className="material-symbols-outlined text-[18px]">library_books</span>
+          <span className="text-[11px] font-medium xl:inline">Pilih Buku</span>
+        </button>
       </header>
+
+      {pickerOpen && books !== null && (
+        <div
+          className="fixed inset-0 z-[55] bg-on-surface/30 backdrop-blur-sm"
+          onClick={() => setPickerOpen(false)}
+        >
+          <div
+            className="absolute top-20 left-4 right-4 max-w-md mx-auto z-60 rounded-2xl bg-surface-container-lowest border border-surface-container p-4 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="mb-3 font-serif text-lg font-semibold text-on-surface">Pilih Buku</h3>
+            <div className="max-h-64 overflow-y-auto space-y-1">
+              {books.map((b) => (
+                <button
+                  key={b.id}
+                  type="button"
+                  onClick={() => {
+                    router.push(`/books/${b.slug}/reviews`);
+                    setPickerOpen(false);
+                  }}
+                  className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-surface-container ${
+                    b.id === bookId
+                      ? "bg-primary/10 text-primary"
+                      : "text-on-surface-variant"
+                  }`}
+                >
+                  {b.id === bookId && (
+                    <span className="material-symbols-outlined text-[14px] text-primary">
+                      check_circle
+                    </span>
+                  )}
+                  {b.coverUrl ? (
+                    <img
+                      src={b.coverUrl}
+                      alt={`Sampul ${b.title}`}
+                      className="h-8 w-8 shrink-0 object-cover rounded"
+                    />
+                  ) : (
+                    <div className="h-8 w-8 shrink-0 rounded bg-surface-container-high flex items-center justify-center">
+                      <span className="text-[10px] text-on-surface-variant">
+                        {b.title.charAt(0)}
+                      </span>
+                    </div>
+                  )}
+                  <span className="font-medium truncate">{b.title}</span>
+                  <span className="text-xs text-on-surface-variant truncate ml-auto">
+                    {b.author}
+                  </span>
+                  {b.id === bookId && <span className="text-[10px] text-primary">(sedang ditampilkan)</span>}
+                </button>
+              ))}
+              {books.length === 0 && (
+                <p className="text-xs text-on-surface-variant text-center">
+                  Tidak ada buku tersedia.
+                </p>
+              )}
+            </div>
+            <p className="mt-2 text-[10px] text-on-surface-variant text-center">
+              Klik di luar untuk tutup.
+            </p>
+          </div>
+        </div>
+      )}
 
       <section className="mt-6 rounded-xl border border-surface-container-high bg-surface-container-lowest p-5 md:p-7">
         <div className="grid gap-6 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:items-center">

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BookNotes, { type BookNote } from "@/components/books/book-notes";
+import BookPicker from "@/components/books/book-picker";
 import SaveBookButton from "@/components/collection/save-book-button";
 import { getAppUser } from "@/lib/auth/get-app-user";
 import { resolveCoverUrl } from "@/lib/books/cover-url";
@@ -243,6 +244,10 @@ export default async function BookDetailPage({
               </span>
               Tulis Catatan
             </a>
+            <BookPicker
+              currentId={book.id}
+              label="Pilih Buku"
+            />
             <SaveBookButton
               bookId={book.id}
               bookTitle={book.title}

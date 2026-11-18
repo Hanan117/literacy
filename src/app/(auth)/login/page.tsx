@@ -28,6 +28,23 @@ function friendlyAuthError(message?: string) {
   ) {
     return "Server autentikasi tidak dapat dihubungi. Pastikan Supabase lokal berjalan, lalu coba lagi.";
   }
+  if (
+    text.includes("redirect_uri_mismatch") ||
+    text.includes("invalid redirect") ||
+    text.includes("redirect uri")
+  ) {
+    return "Konfigurasi login sosial belum sesuai. Redirect URI belum terdaftar di Google/Apple atau Supabase.";
+  }
+  if (
+    text.includes("provider_not_configured") ||
+    text.includes("provider not configured") ||
+    text.includes("provider is not enabled")
+  ) {
+    return "Login sosial belum diaktifkan. Hubungi administrator.";
+  }
+  if (text.includes("oauth") || text.includes("social")) {
+    return "Login sosial gagal. Pastikan Google/Apple sudah diaktifkan di Supabase dan coba lagi.";
+  }
   return "Gagal masuk. Coba lagi.";
 }
 
@@ -43,9 +60,9 @@ function LoginContent() {
   const error =
     formError ??
     (queryError === "oauth"
-      ? "Login sosial gagal. Silakan coba lagi."
+      ? "Login sosial gagal. Pastikan Google/Apple sudah diaktifkan di Supabase dan redirect URI terdaftar dengan benar."
       : queryError === "config"
-        ? "Login sosial belum dikonfigurasi."
+        ? "Login sosial belum dikonfigurasi di server."
         : null);
 
   // Sudah punya sesi? Jangan tampilkan form login lagi.

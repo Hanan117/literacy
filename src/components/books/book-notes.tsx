@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import BookPicker from "@/components/books/book-picker";
 
 export type BookNote = {
   id: string;
@@ -208,6 +209,10 @@ export default function BookNotes({
             Tambah Catatan
           </button>
         ) : null}
+        <BookPicker
+          currentId={bookId}
+          label="Pilih Buku"
+        />
       </div>
 
       {!isAuthenticated ? (

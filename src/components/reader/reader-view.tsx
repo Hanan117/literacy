@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FREE_PAGES } from "@/lib/constants/reader";
 import PdfCanvas from "./pdf-canvas";
@@ -68,6 +69,7 @@ export default function ReaderView({
   isAuthenticated: boolean;
   userName: string;
 }) {
+  const router = useRouter();
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [fileAttempt, setFileAttempt] = useState(0);
   const [fileError, setFileError] = useState<string | null>(null);
@@ -84,6 +86,14 @@ export default function ReaderView({
   const [zen, setZen] = useState(false);
   const [notesOpen, setNotesOpen] = useState(false);
   const [loginPrompt, setLoginPrompt] = useState(false);
+
+  const [books, setBooks] = useState<{
+    id: string;
+    title: string;
+    author: string;
+    coverUrl: string | null;
+  }[]>();
+  const [pickerOpen, setPickerOpen] = useState(false);
 
   const [bookmarks, setBookmarks] = useState<ReaderBookmark[]>(initialBookmarks);
   const [bookmarkBusy, setBookmarkBusy] = useState(false);
@@ -150,6 +160,25 @@ export default function ReaderView({
     } catch {
       // abaikan
     }
+  }, []);
+
+  // Muat daftar buku yang bisa dipindah dari mode baca.
+  useEffect(() => {
+    let cancelled = false;
+    apiRequest<{
+      books: { id: string; title: string; author: string; coverUrl: string | null }[];
+    }>("/api/books")
+      .then((data) => {
+        if (!cancelled) setBooks(data.books);
+      })
+      .catch(() => {
+        // Gagal muat daftar tidak mengganggu sesi baca yang berjalan.
+        if (!cancelled) setBooks([]);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const chooseTone = (next: Tone) => {
@@ -505,10 +534,84 @@ export default function ReaderView({
               >
                 <span className="material-symbols-outlined text-[20px]">fullscreen</span>
               </button>
+
+              <button
+                type="button"
+                onClick={() => setPickerOpen((open) => !open)}
+                className="flex items-center gap-1 rounded-lg px-2 py-2 text-on-surface-variant transition-colors hover:bg-surface-container hover:text-on-surface"
+                title="Pilih buku lain"
+                aria-expanded={pickerOpen}
+              >
+                <span className="material-symbols-outlined text-[18px]">library_books</span>
+                <span className="text-[11px] font-medium xl:inline">Pilih buku</span>
+              </button>
             </div>
           </div>
         </div>
       </header>
+
+      {pickerOpen && books && (
+        <div
+          className="fixed inset-0 z-[55] bg-on-surface/30 backdrop-blur-sm"
+          onClick={() => setPickerOpen(false)}
+        >
+          <div
+            className="absolute top-[105px] left-4 right-4 max-w-md mx-auto z-60 rounded-2xl bg-surface-container-lowest border border-surface-container p-4 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="mb-3 font-serif text-lg font-semibold text-on-surface">Pilih Buku</h3>
+            <div className="max-h-64 overflow-y-auto space-y-1">
+              {books.map((b) => (
+                <button
+                  key={b.id}
+                  type="button"
+                  onClick={() => {
+                    router.push(`/read/${b.id}`);
+                    setPickerOpen(false);
+                  }}
+                  className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-surface-container ${
+                    b.id === book.id
+                      ? "bg-primary/10 text-primary"
+                      : "text-on-surface-variant"
+                  }`}
+                >
+                  {b.id === book.id && (
+                    <span className="material-symbols-outlined text-[14px] text-primary">
+                      check_circle
+                    </span>
+                  )}
+                  {b.coverUrl ? (
+                    <img
+                      src={b.coverUrl}
+                      alt={`Sampul ${b.title}`}
+                      className="h-8 w-8 shrink-0 object-cover rounded"
+                    />
+                  ) : (
+                    <div className="h-8 w-8 shrink-0 rounded bg-surface-container-high flex items-center justify-center">
+                      <span className="text-[10px] text-on-surface-variant">
+                        {b.title.charAt(0)}
+                      </span>
+                    </div>
+                  )}
+                  <span className="font-medium truncate">{b.title}</span>
+                  <span className="text-xs text-on-surface-variant truncate ml-auto">
+                    {b.author}
+                  </span>
+                  {b.id === book.id && <span className="text-[10px] text-primary">(sedang dibaca)</span>}
+                </button>
+              ))}
+              {books.length === 0 && (
+                <p className="text-xs text-on-surface-variant text-center">
+                  Tidak ada buku tersedia.
+                </p>
+              )}
+            </div>
+            <p className="mt-2 text-[10px] text-on-surface-variant text-center">
+              Klik di luar untuk tutup.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Hairline progress */}
       <div className="relative mb-6 h-[3px] w-full overflow-hidden rounded-[999px] bg-surface-container-high">
