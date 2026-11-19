@@ -26,7 +26,7 @@ export default async function UploadPage() {
     author: book.author,
     category: book.category?.name ?? "Tanpa Kategori",
     isPublished: book.isPublished,
-    coverUrl: resolveCoverUrl(book.coverUrl),
+    coverUrl: book.coverUrl ? resolveCoverUrl(book.coverUrl) : null,
     fileSize: book.fileSize === null ? null : Number(book.fileSize),
     pdfPageCount: book.pdfPageCount,
     createdAt: book.createdAt.toISOString(),

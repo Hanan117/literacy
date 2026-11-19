@@ -4,7 +4,9 @@ import { getAdminUser } from "@/lib/auth/require-admin";
 import { publicCoverUrl } from "@/lib/books/cover-url";
 import { prisma } from "@/lib/prisma";
 
-type Action = "complete" | "publish" | "unpublish" | "delete";
+type Action = "complete" | "publish" | "unpublish" | "delete" | "cover" | "set-cover";
+
+const COVER_EXTENSIONS = new Set(["jpg", "jpeg", "png", "webp"]);
 
 export async function PATCH(
   req: Request,
@@ -21,6 +23,7 @@ export async function PATCH(
     action?: Action;
     fileSize?: number | string;
     coverPath?: string;
+    coverExtension?: string;
   };
 
   try {
@@ -60,6 +63,49 @@ export async function PATCH(
       data: { isPublished: body.action === "publish" },
       select: { id: true, isPublished: true },
     });
+    return NextResponse.json({ ok: true, book: updated });
+  }
+
+  if (body.action === "cover") {
+    const supabase = createAdminClient();
+    await supabase.storage.createBucket("covers", { public: true }).catch(() => undefined);
+    await supabase.storage
+      .updateBucket("covers", { public: true })
+      .catch((error) => console.error("updateBucket covers:", error));
+
+    const coverExtension = (body.coverExtension || "").toLowerCase();
+    if (coverExtension && !COVER_EXTENSIONS.has(coverExtension)) {
+      return NextResponse.json({ error: "Format sampul tidak didukung." }, { status: 400 });
+    }
+    const coverPath = `${id}/${crypto.randomUUID()}${coverExtension ? "." + coverExtension : ".jpg"}`;
+
+    const { data: coverUpload, error: coverError } = await supabase.storage
+      .from("covers")
+      .createSignedUploadUrl(coverPath);
+
+    if (coverError || !coverUpload) {
+      console.error("createSignedUploadUrl covers:", coverError);
+      return NextResponse.json(
+        { error: "Gagal menyiapkan unggahan sampul. Coba lagi." },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ cover: coverUpload });
+  }
+
+  if (body.action === "set-cover") {
+    const coverPath = (body.coverPath || "").trim();
+    if (coverPath && !coverPath.startsWith(`${id}/`)) {
+      return NextResponse.json({ error: "Path sampul tidak valid." }, { status: 400 });
+    }
+
+    const updated = await prisma.book.update({
+      where: { id },
+      data: { coverUrl: coverPath ? publicCoverUrl(coverPath) : null },
+      select: { id: true, coverUrl: true },
+    });
+
     return NextResponse.json({ ok: true, book: updated });
   }
 

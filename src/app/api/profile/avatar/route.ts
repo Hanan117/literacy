@@ -70,6 +70,12 @@ export async function POST(req: Request) {
   const supabase = createAdminClient();
 
   try {
+    // Pastikan bucket tersedia dan publik sebelum mengunggah.
+    await supabase.storage.createBucket(BUCKET, { public: true }).catch(() => undefined);
+    await supabase.storage
+      .updateBucket(BUCKET, { public: true })
+      .catch((error) => console.error("updateBucket avatars:", error));
+
     await clearFolder(supabase, user.id);
 
     const path = `${user.id}/${Date.now()}.${ext}`;

@@ -53,6 +53,9 @@ export default function UploadManager({
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [pendingId, setPendingId] = useState<string | null>(null);
+  const coverFileRefs = useRef<Record<string, HTMLInputElement>>({});
+  const [coverUploading, setCoverUploading] = useState<string | null>(null);
+  const [coverUploadError, setCoverUploadError] = useState<Record<string, string>>({});
 
   const discardDraft = async (id: string) => {
     await fetch(`/api/admin/books/${id}`, {
@@ -242,6 +245,73 @@ export default function UploadManager({
       setError("Gagal memperbarui buku. Coba lagi.");
     } finally {
       setPendingId(null);
+    }
+  }
+
+  async function uploadBookCover(bookId: string, event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      setCoverUploadError((prev) => ({ ...prev, [bookId]: "Sampul harus JPG, PNG, atau WEBP." }));
+      return;
+    }
+    if (file.size > MAX_COVER_BYTES) {
+      setCoverUploadError((prev) => ({ ...prev, [bookId]: "Ukuran sampul maksimal 2 MB." }));
+      return;
+    }
+
+    setCoverUploading(bookId);
+    setCoverUploadError((prev) => { const { [bookId]: _, ...rest } = prev; return rest; });
+
+    try {
+      const extension = (file.name.split(".").pop() || "").toLowerCase();
+      const res = await fetch(`/api/admin/books/${bookId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "cover", coverExtension: extension }),
+      });
+      const data = (await res.json().catch(() => ({}))) as {
+        error?: string;
+        cover?: { path: string; token: string };
+      };
+      if (!res.ok || !data.cover) {
+        setCoverUploadError((prev) => ({ ...prev, [bookId]: data.error || "Gagal menyiapkan unggahan sampul." }));
+        return;
+      }
+
+      const supabase = createClient();
+      const { error: uploadError } = await supabase.storage
+        .from("covers")
+        .uploadToSignedUrl(data.cover.path, data.cover.token, file, {
+          contentType: file.type,
+        });
+
+      if (uploadError) {
+        setCoverUploadError((prev) => ({ ...prev, [bookId]: uploadError.message }));
+        return;
+      }
+
+      const complete = await fetch(`/api/admin/books/${bookId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "set-cover", coverPath: data.cover.path }),
+      });
+      const completeData = (await complete.json().catch(() => ({}))) as { error?: string };
+      if (!complete.ok) {
+        setCoverUploadError((prev) => ({ ...prev, [bookId]: completeData.error || "Gagal menyimpan sampul." }));
+        return;
+      }
+
+      setInfo("Sampul berhasil diperbarui.");
+      router.refresh();
+    } catch (err) {
+      setCoverUploadError((prev) => ({
+        ...prev,
+        [bookId]: err instanceof Error ? err.message : "Terjadi kesalahan. Coba lagi.",
+      }));
+    } finally {
+      setCoverUploading(null);
+      if (coverFileRefs.current[bookId]) coverFileRefs.current[bookId].value = "";
     }
   }
 
@@ -474,6 +544,39 @@ export default function UploadManager({
                   <p className="mt-1 text-[10px] text-outline">
                     {book.category} • {book.pdfPageCount || 0} hal • {formatBytes(book.fileSize)}
                   </p>
+
+                  {book.coverUrl ? (
+                    <p className="mt-1 text-[10px] text-primary">
+                      Sampul terpasang
+                    </p>
+                  ) : (
+                    <div className="mt-2 flex items-center gap-2">
+                      <input
+                        id={`cover-${book.id}`}
+                        ref={(el) => {
+                          if (el) coverFileRefs.current[book.id] = el;
+                        }}
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        onChange={(event) => uploadBookCover(book.id, event)}
+                        className="sr-only"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => coverFileRefs.current[book.id]?.click()}
+                        disabled={coverUploading === book.id}
+                        className={`rounded px-2.5 py-1 text-[10px] font-semibold transition-colors hover:bg-red-50 ${
+                          coverUploading === book.id ? "opacity-50 cursor-not-allowed" : "text-red-600"
+                        }`}
+                      >
+                        {coverUploading === book.id ? "Mengunggah sampul…" : "Unggah Sampul"}
+                      </button>
+                    </div>
+                  )}
+
+                  {coverUploadError[book.id] && (
+                    <p className="mt-1 text-[10px] text-red-600">{coverUploadError[book.id]}</p>
+                  )}
 
                   <div className="mt-auto flex flex-wrap items-center gap-1.5 pt-2">
                     <button

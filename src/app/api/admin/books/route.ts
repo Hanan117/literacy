@@ -80,11 +80,21 @@ export async function POST(req: Request) {
 
     const supabase = createAdminClient();
 
+    // Pastikan bucket penyimpanan tersedia dan publik sebelum meminta signed upload URL.
+    await supabase.storage.createBucket("books", { public: false }).catch(() => undefined);
+    if (coverPath) {
+      await supabase.storage.createBucket("covers", { public: true }).catch(() => undefined);
+      await supabase.storage
+        .updateBucket("covers", { public: true })
+        .catch((error) => console.error("updateBucket covers:", error));
+    }
+
     const { data: pdfUpload, error: pdfError } = await supabase.storage
       .from("books")
       .createSignedUploadUrl(pdfPath);
 
     if (pdfError || !pdfUpload) {
+      console.error("createSignedUploadUrl books:", pdfError);
       await prisma.book.delete({ where: { id: bookId } }).catch(() => undefined);
       return NextResponse.json(
         { error: "Gagal menyiapkan unggahan PDF. Coba lagi." },
