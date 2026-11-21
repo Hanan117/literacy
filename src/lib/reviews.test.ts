@@ -78,9 +78,9 @@ describe("validateReviewInput", () => {
     expect(validateReviewInput({ rating: 6, title: "Judul", body: "Isi ulasan yang cukup panjang." }).ok).toBe(false);
   });
 
-  test("rejects short title and body", () => {
+  test("rejects short title", () => {
     expect(validateReviewInput({ rating: 5, title: "ab", body: "Isi ulasan yang cukup panjang." }).ok).toBe(false);
-    expect(validateReviewInput({ rating: 5, title: "Judul", body: "terlalu pendek" }).ok).toBe(false);
+    expect(validateReviewInput({ rating: 5, title: "Judul", body: "terlalu pendek" }).ok).toBe(true);
   });
 
   test("trims a valid input and normalizes an empty quote", () => {

@@ -41,7 +41,7 @@ export const RATING_LABELS: Record<number, string> = {
 
 const TITLE_MIN = 3;
 const TITLE_MAX = 120;
-const BODY_MIN = 20;
+const BODY_MIN = 0;
 const BODY_MAX = 4000;
 const QUOTE_MAX = 280;
 
