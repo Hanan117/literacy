@@ -7,6 +7,7 @@ import {
   RATING_LABELS,
   formatReviewDate,
   starFill,
+  validateReviewInput,
   type RatingBucket,
   type ReviewFilter,
   type ReviewItem,
@@ -228,13 +229,18 @@ export default function ReviewsExperience({
 
   const submit = async () => {
     if (busy) return;
+    const validation = validateReviewInput({ rating, title, quote, body });
+    if (!validation.ok) {
+      setError(validation.error);
+      return;
+    }
     setBusy(true);
     setError(null);
     try {
       const response = await fetch(`/api/books/${bookId}/reviews`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ rating, title, quote, body }),
+        body: JSON.stringify(validation.value),
       });
       const data = (await response.json().catch(() => ({}))) as { error?: string };
       if (!response.ok) throw new Error(data.error || "Gagal menyimpan ulasan.");
@@ -804,12 +810,7 @@ export default function ReviewsExperience({
               <button
                 type="button"
                 onClick={submit}
-                disabled={
-                  busy ||
-                  title.trim().length < 3 ||
-                  body.trim().length < 20 ||
-                  rating < 1
-                }
+                disabled={busy}
                 className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-on-primary transition-colors hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {busy ? "Menyimpan…" : ownReview ? "Perbarui Ulasan" : "Kirim Ulasan"}
