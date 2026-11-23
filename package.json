@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint .",
-    "postinstall": "node scripts/copy-pdf-worker.mjs",
+    "postinstall": "node scripts/copy-pdf-worker.mjs && prisma generate",
     "supabase:start": "supabase start -x studio,imgproxy,edge-runtime,supavisor,logflare",
     "supabase:stop": "supabase stop",
     "supabase:status": "supabase status",
